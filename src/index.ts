@@ -20,6 +20,7 @@ async function main(): Promise<void> {
     .command(applicationCommand)
     .command(notificationCommand)
     .command(messageCommand)
+    .wrap(yargs().terminalWidth())
     .help().argv;
 
   process.exit(0);
