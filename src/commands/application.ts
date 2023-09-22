@@ -76,15 +76,22 @@ const confirmWithSecret = [
   },
 ];
 
-async function deleteApplicationHandler(argv: IdPositionalT) {
-  const { secret } = await inquirer.prompt(confirmWithSecret);
-
+async function deleteApplicationHandler(
+  argv: IdPositionalT & { '--force'?: boolean; '-f'?: boolean },
+) {
+  let secret: string;
+  if (argv['--force'] || argv['-f']) {
+    ({ secret } = await fetchCordManagementApi<ApplicationData>(
+      `applications/${argv.id}`,
+    ));
+  } else {
+    ({ secret } = await inquirer.prompt(confirmWithSecret));
+  }
   const result = await fetchCordManagementApi(
     `applications/${argv.id}`,
     'DELETE',
     JSON.stringify({ secret }),
   );
-
   prettyPrint(result);
 }
 
@@ -174,9 +181,16 @@ export const applicationCommand = {
         updateApplicationHandler,
       )
       .command(
-        'delete <id>',
+        'delete [--force] <id>',
         'delete an application',
-        (yargs: Argv) => yargs.positional('id', idPositional.id),
+        (yargs: Argv) =>
+          yargs
+            .positional('id', idPositional.id)
+            .boolean(['--force', '-f'])
+            .help(
+              'force, -f',
+              'delete without app secret. CAUTION! THIS WILL DELETE THE ENTIRE APPLICATION, INCLUDING ALL USERS, THREADS, AND MESSAGES!',
+            ),
         deleteApplicationHandler,
       );
   },
