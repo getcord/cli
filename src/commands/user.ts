@@ -101,26 +101,26 @@ async function updatePreferencesHandler(argv: UpdatePreferencesOptionsT) {
 
 const updateUserPresenceOptions = {
   'organization-id': {
-    description: 'the organization the user belongs to',
+    description: 'The organization the user belongs to',
     nargs: 1,
     string: true,
     demandOption: true,
   },
   location: {
-    description: 'the location to set the user as present in as a json string',
+    description: 'The location to set the user as present in as a json string',
     nargs: 1,
     string: true,
     demandOption: true,
   },
   durable: {
     description:
-      'when true, sets durable presence. When false, sets ephemeral presence',
+      'When true, sets durable presence. When false, sets ephemeral presence',
     nargs: 1,
     boolean: true,
   },
   absent: {
     description:
-      'when true, removes the user presence from the specified location',
+      'When true, removes the user presence from the specified location',
     nargs: 1,
     boolean: true,
   },
@@ -140,17 +140,17 @@ type DeleteUserOptionsT = IdPositionalT &
 
 const listAllUsersOptions = {
   limit: {
-    description: 'max number of users to return',
+    description: 'Max number of users to return',
     nargs: 1,
     number: true,
   },
   token: {
-    description: 'pagination token',
+    description: 'Pagination token',
     nargs: 1,
     string: true,
   },
   filter: {
-    description: 'filter object as a json string',
+    description: 'Filter object as a json string',
     nargs: 1,
     string: true,
   },
@@ -159,17 +159,17 @@ type ListAllUsersOptionT = InferredOptionTypes<typeof listAllUsersOptions>;
 
 const createOrUpdateUserOptions = {
   email: {
-    description: 'email address of the user',
+    description: 'Email address of the user',
     nargs: 1,
     string: true,
   },
   name: {
-    description: 'name of the user',
+    description: 'Name of the user',
     nargs: 1,
     string: true,
   },
   shortName: {
-    description: 'short (display) name of the user',
+    description: 'Short (display) name of the user',
     nargs: 1,
     string: true,
   },
@@ -179,7 +179,7 @@ type CreateOrUpdateUserOptionsT = IdPositionalT &
 
 const deleteUserOptions = {
   'permanently-delete': {
-    description: 'user will only be deleted if true',
+    description: 'User will only be deleted if true',
     nargs: 1,
     boolean: true,
   },
@@ -187,14 +187,14 @@ const deleteUserOptions = {
 
 const updatePreferencesOptions = {
   key: {
-    description: 'preference key. Defaults to "notification_channels"',
+    description: 'Preference key. Defaults to "notification_channels"',
     nargs: 1,
     string: true,
     default: 'notification_channels',
   },
   value: {
     description:
-      'updated preference value as a json string. Only updates the values that are passed.',
+      'Updated preference value as a json string. Only updates the values that are passed.',
     nargs: 1,
     string: true,
     demandOption: true,
@@ -206,54 +206,54 @@ type UpdatePreferencesOptionsT = IdPositionalT &
 export const userCommand = {
   command: 'user',
   describe:
-    'manipulate a user. For more info refer to docs: https://docs.cord.com/rest-apis/users',
+    'Manipulate a user. For more info refer to docs: https://docs.cord.com/rest-apis/users',
   builder: (yargs: Argv) => {
     return yargs
       .demand(1)
       .positional('id', idPositional.id)
       .command(
         'ls',
-        'list all users',
+        'List all users',
         (yargs: Argv<IdPositionalT>) => yargs.options(listAllUsersOptions),
         listAllUsersHandler,
       )
       .command('get <id>', 'get a user', (yargs) => yargs, getUserHandler)
       .command(
         'create <id>',
-        'create a user',
+        'Create a user',
         (yargs: Argv<IdPositionalT>) =>
           yargs.options(createOrUpdateUserOptions),
         createOrUpdateUserHandler,
       )
       .command(
         'update <id>',
-        'update a user',
+        'Update a user',
         (yargs: Argv<IdPositionalT>) =>
           yargs.options(createOrUpdateUserOptions),
         createOrUpdateUserHandler,
       )
       .command(
         'update-presence <id>',
-        "update a user's location",
+        "Update a user's location",
         (yargs: Argv<IdPositionalT>) =>
           yargs.options(updateUserPresenceOptions),
         updateUserPresenceHandler,
       )
       .command(
         'delete <id>',
-        'delete a user',
+        'Delete a user',
         (yargs: Argv<IdPositionalT>) => yargs.options(deleteUserOptions),
         deleteUserHandler,
       )
       .command(
         'ls-preferences <id>',
-        'list all preferences for a user',
+        'List all preferences for a user',
         (yargs: Argv<IdPositionalT>) => yargs,
         listAllPreferencesHandler,
       )
       .command(
         'update-preferences <id>',
-        'update preferences for a user',
+        'Update preferences for a user',
         (yargs: Argv<IdPositionalT>) => yargs.options(updatePreferencesOptions),
         updatePreferencesHandler,
       );

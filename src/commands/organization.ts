@@ -62,12 +62,12 @@ async function removeMemberOrgHandler(argv: AddRemoveMemberOptionsT) {
 
 const createOrUpdateOrgOptions = {
   name: {
-    description: 'name of the organization',
+    description: 'Name of the organization',
     nargs: 1,
     string: true,
   },
   status: {
-    description: 'active status of the organization',
+    description: 'Active status of the organization',
     nargs: 1,
     choices: ['active', 'deleted'],
   },
@@ -77,7 +77,7 @@ type CreateOrUpdateOrgOptionsT = IdPositionalT &
 
 const addRemoveMemberOptions = {
   user: {
-    description: 'user to add or remove',
+    description: 'User to add or remove',
     nargs: 1,
     demandOption: true,
     string: true,
@@ -89,51 +89,62 @@ type AddRemoveMemberOptionsT = IdPositionalT &
 export const organizationCommand = {
   command: ['organization', 'org'],
   describe:
-    'manipulate organizations.  For more info refer to docs: https://docs.cord.com/rest-apis/organizations',
+    'Manipulate organizations. For more info refer to docs: https://docs.cord.com/rest-apis/organizations',
   builder: (yargs: Argv) => {
     return yargs
       .demand(1)
-      .positional('id', idPositional.id)
       .command(
         'ls',
-        'list all organizations',
+        'List all organizations',
         (yargs) => yargs,
         listAllOrgsHandler,
       )
       .command(
         'get <id>',
-        'get an organization',
-        (yargs) => yargs,
+        'Get an organization',
+        (yargs: Argv) => yargs.positional('id', idPositional.id),
         getOrgHandler,
       )
       .command(
         'create <id>',
-        'create an organization',
-        (yargs: Argv<IdPositionalT>) => yargs.options(createOrUpdateOrgOptions),
+        'Create an organization',
+        (yargs: Argv) =>
+          yargs
+            .positional('id', idPositional.id)
+            .options(createOrUpdateOrgOptions),
         createOrUpdateOrgHandler,
       )
       .command(
         'update <id>',
-        'update an organization',
-        (yargs: Argv<IdPositionalT>) => yargs.options(createOrUpdateOrgOptions),
+        'Update an organization',
+        (yargs: Argv) =>
+          yargs
+            .positional('id', idPositional.id)
+            .options(createOrUpdateOrgOptions),
         createOrUpdateOrgHandler,
       )
       .command(
         'delete <id>',
-        'delete an organization',
-        (yargs) => yargs,
+        'Delete an organization',
+        (yargs: Argv) => yargs.positional('id', idPositional.id),
         deleteOrgHandler,
       )
       .command(
         'add-member <id>',
-        'add a member to an organization',
-        (yargs: Argv<IdPositionalT>) => yargs.options(addRemoveMemberOptions),
+        'Add a member to an organization',
+        (yargs: Argv) =>
+          yargs
+            .positional('id', idPositional.id)
+            .options(addRemoveMemberOptions),
         addMemberOrgHandler,
       )
       .command(
         'remove-member <id>',
-        'remove a member to an organization',
-        (yargs: Argv<IdPositionalT>) => yargs.options(addRemoveMemberOptions),
+        'Remove a member to an organization',
+        (yargs: Argv) =>
+          yargs
+            .positional('id', idPositional.id)
+            .options(addRemoveMemberOptions),
         removeMemberOrgHandler,
       );
   },

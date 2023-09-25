@@ -7,7 +7,7 @@ import { prettyPrint } from 'src/prettyPrint';
 
 const threadIdOption = {
   'thread-id': {
-    description: 'id of the thread',
+    description: 'ID of the thread',
     nargs: 1,
     string: true,
     demandOption: true,
@@ -18,7 +18,7 @@ type ThreadIDOptionT = InferredOptionTypes<typeof threadIdOption>;
 
 const optionalIdPositional = {
   id: {
-    description: 'id of the message',
+    description: 'ID of the message',
     nargs: 1,
     string: true,
   },
@@ -123,62 +123,62 @@ async function deleteMessageHandler(argv: IdPositionalT & ThreadIDOptionT) {
 
 const createOrUpdateBaseMessageOptions = {
   'add-reactions': {
-    description: 'reactions to add to this message as a json string',
+    description: 'Reactions to add to this message as a json string',
     nargs: 1,
     string: true,
   },
   'add-attachments': {
-    description: 'attachments to add to this message as a json string',
+    description: 'Attachments to add to this message as a json string',
     nargs: 1,
     string: true,
   },
   'author-id': {
-    description: 'id of the user who sent the message',
+    description: 'ID of the user who sent the message',
     nargs: 1,
     string: true,
   },
   content: {
-    description: 'content of the message as a json string',
+    description: 'Content of the message as a json string',
     nargs: 1,
     string: true,
   },
   'icon-url': {
-    description: 'url of the icon to show next to an action message',
+    description: 'Url of the icon to show next to an action message',
     nargs: 1,
     string: true,
   },
   'created-timestamp': {
-    description: 'timestamp the message was created',
+    description: 'Timestamp the message was created',
     nargs: 1,
     string: true,
   },
   metadata: {
-    description: 'metadata of the thread as a json string',
+    description: 'Metadata of the thread as a json string',
     nargs: 1,
     string: true,
   },
   url: {
-    description: 'a url where the message can be seen',
+    description: 'A url where the message can be seen',
     nargs: 1,
     string: true,
   },
   'deleted-timestamp': {
-    description: 'timestamp when the message was deleted',
+    description: 'Timestamp when the message was deleted',
     nargs: 1,
     string: true,
   },
   'updated-timestamp': {
-    description: 'timestamp when the message was updated',
+    description: 'Timestamp when the message was updated',
     nargs: 1,
     string: true,
   },
   type: {
-    description: 'type of message',
+    description: 'Type of message',
     nargs: 1,
     choices: ['action_message', 'user_message'],
   },
   'extra-classnames': {
-    description: 'a space separated list of classnames to add to the thread',
+    description: 'A space separated list of classnames to add to the thread',
     nargs: 1,
     string: true,
   },
@@ -188,7 +188,7 @@ const createMessageOptions = {
   ...createOrUpdateBaseMessageOptions,
   'create-thread': {
     description:
-      "parameters for creating a thread, if the thread doesn't exist yet, as a json string",
+      "Parameters for creating a thread, if the thread doesn't exist yet, as a json string",
     nargs: 1,
     string: true,
   },
@@ -205,7 +205,7 @@ const createMessageOptions = {
 const updateMessageOptions = {
   ...createOrUpdateBaseMessageOptions,
   'new-id': {
-    description: 'remove existing message id and replace with this new one',
+    description: 'Remove existing message id and replace with this new one',
     nargs: 1,
     string: true,
   },
@@ -220,26 +220,26 @@ type UpdateMessageOptionsT = ThreadIDOptionT &
 export const messageCommand = {
   command: 'message',
   description:
-    'manipulate messages. For more info refer to docs: https://docs.cord.com/rest-apis/messages',
+    'Manipulate messages. For more info refer to docs: https://docs.cord.com/rest-apis/messages',
   builder: (yargs: Argv) => {
     return yargs
       .demand(1)
       .command(
         'ls',
-        'list all messages',
+        'List all messages',
         (yargs) => yargs,
         listAllMessagesHandler,
       )
       .command(
         'get <id>',
-        'get a message',
+        'Get a message',
         (yargs: Argv) =>
           yargs.positional('id', idPositional.id).options(threadIdOption),
         getMessageHandler,
       )
       .command(
         'create [id]',
-        'add a new message to a thread',
+        'Add a new message to a thread',
         (yargs: Argv) =>
           yargs
             .options({ ...createMessageOptions, ...threadIdOption })
@@ -249,7 +249,7 @@ export const messageCommand = {
       )
       .command(
         'update <id>',
-        'update a message',
+        'Update a message',
         (yargs: Argv) =>
           yargs
             .options({ ...updateMessageOptions, ...threadIdOption })
@@ -258,7 +258,7 @@ export const messageCommand = {
       )
       .command(
         'delete <id>',
-        'delete a message',
+        'Delete a message',
         (yargs: Argv) =>
           yargs.positional('id', idPositional.id).options(threadIdOption),
         deleteMessageHandler,

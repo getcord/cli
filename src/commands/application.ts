@@ -97,22 +97,22 @@ async function deleteApplicationHandler(
 
 const createOrUpdateBaseOptions = {
   'icon-url': {
-    description: 'url for application icon. Defaults to Cord logo',
+    description: 'Url for application icon. Defaults to Cord logo',
     nargs: 1,
     string: true,
   },
   'email-settings': {
-    description: 'json string of your email settings object',
+    description: 'Json string of your email settings object',
     nargs: 1,
     string: true,
   },
   'event-webhook-url': {
-    description: 'url the events webhook is sent to',
+    description: 'Url the events webhook is sent to',
     nargs: 1,
     string: true,
   },
   'redirect-uri': {
-    description: 'custom url link contained in email and slack notifications',
+    description: 'Custom url link contained in email and slack notifications',
     nargs: 1,
     string: true,
   },
@@ -121,7 +121,7 @@ const createOrUpdateBaseOptions = {
 const createApplicationOptions = {
   ...createOrUpdateBaseOptions,
   name: {
-    description: 'name of the application',
+    description: 'Name of the application',
     nargs: 1,
     string: true,
     demandOption: true,
@@ -135,9 +135,7 @@ type CreateApplicationOptionsT = InferredOptionTypes<
 const updateApplicationOptions = {
   ...createOrUpdateBaseOptions,
   name: {
-    description: 'name of the application',
-    nargs: 1,
-    string: true,
+    ...createApplicationOptions.name,
     demandOption: false,
   },
 } as const;
@@ -149,31 +147,31 @@ type UpdateApplicationOptionsT = InferredOptionTypes<
 export const applicationCommand = {
   command: ['application', 'app'],
   describe:
-    'manipulate applications. For more info refer to docs: https://docs.cord.com/rest-apis/applications',
+    'Manipulate applications. For more info refer to docs: https://docs.cord.com/rest-apis/applications',
   builder: (yargs: Argv) => {
     return yargs
       .demand(1)
       .command(
         'ls',
-        'list all applications',
+        'List all applications',
         (yargs) => yargs,
         listAllApplicationsHandler,
       )
       .command(
         'get <id>',
-        'get an application',
+        'Get an application',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         getApplicationHandler,
       )
       .command(
         'create',
-        'create an application',
+        'Create an application',
         (yargs: Argv) => yargs.options(createApplicationOptions),
         createApplicationHandler,
       )
       .command(
         'update <id>',
-        'update an application',
+        'Update an application',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
@@ -182,7 +180,7 @@ export const applicationCommand = {
       )
       .command(
         'delete [--force] <id>',
-        'delete an application',
+        'Delete an application',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)

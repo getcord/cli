@@ -32,41 +32,41 @@ async function createNotificationHandler(argv: CreateNotificationOptionsT) {
 
 const createNotificationOptions = {
   'recipient-id': {
-    description: 'id of the user receiving the notification',
+    description: 'ID of the user receiving the notification',
     nargs: 1,
     string: true,
     demandOption: true,
   },
   'actor-id': {
-    description: 'id of the user who is sending the notification',
+    description: 'ID of the user who is sending the notification',
     nargs: 1,
     string: true,
   },
   template: {
-    description: 'template for the header of the notification',
+    description: 'Template for the header of the notification',
     nargs: 1,
     string: true,
     demandOption: true,
   },
   url: {
-    description: 'url of a page to go to when the notification is clicked',
+    description: 'Url of a page to go to when the notification is clicked',
     nargs: 1,
     string: true,
     demandOption: true,
   },
   'icon-url': {
-    description: 'url of an icon image',
+    description: 'Url of an icon image',
     nargs: 1,
     string: true,
   },
   metadata: {
-    description: 'metadata of the notification as a json string',
+    description: 'Metadata of the notification as a json string',
     nargs: 1,
     string: true,
   },
   'extra-classnames': {
     description:
-      'a space separated list of classnames to add to the notification',
+      'A space separated list of classnames to add to the notification',
     nargs: 1,
     string: true,
   },
@@ -89,26 +89,26 @@ async function deleteNotificationHandler(argv: IdPositionalT) {
 export const notificationCommand = {
   command: 'notification',
   describe:
-    'manipulate notifications. For more info refer to docs: https://docs.cord.com/rest-apis/notifications',
+    'Manipulate notifications. For more info refer to docs: https://docs.cord.com/rest-apis/notifications',
   builder: (yargs: Argv) => {
     return yargs
       .demand(1)
       .command(
         'ls <user-id>',
-        'list all notifications a user has received',
+        'List all notifications a user has received',
         (yargs: Argv) =>
           yargs.positional('user-id', userIdPositional['user-id']),
         listAllNotificationsHandler,
       )
       .command(
         'create',
-        'create a notification',
+        'Create a notification',
         (yargs: Argv) => yargs.options(createNotificationOptions),
         createNotificationHandler,
       )
       .command(
         'delete <id>',
-        'delete a notification',
+        'Delete a notification',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         deleteNotificationHandler,
       );

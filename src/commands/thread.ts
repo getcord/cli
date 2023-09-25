@@ -65,55 +65,55 @@ const updateThreadOptions = {
     string: true,
   },
   'new-id': {
-    description: 'id of the thread',
+    description: 'Remove existing thread id and replace with this new one',
     nargs: 1,
     string: true,
   },
   metadata: {
-    description: 'metadata of the thread as a json string',
+    description: 'Metadata of the thread as a json string',
     nargs: 1,
     string: true,
   },
   url: {
-    description: 'a url where the thread can be seen',
+    description: 'A url where the thread can be seen',
     nargs: 1,
     string: true,
   },
   'organization-id': {
-    description: 'the organization id this thread is in',
+    description: 'The organization id this thread is in',
     nargs: 1,
     string: true,
   },
   'extra-classnames': {
-    description: 'a space separated list of classnames to add to the thread',
+    description: 'A space separated list of classnames to add to the thread',
     nargs: 1,
     string: true,
   },
   location: {
-    description: 'the location of this thread as a json string',
+    description: 'The location of this thread as a json string',
     nargs: 1,
     string: true,
   },
   'resolved-timestamp': {
     description:
-      'the timestamp when this thread was resolved, or null if not resolved',
+      'The timestamp when this thread was resolved, or null if not resolved',
     nargs: 1,
     string: true,
   },
   'user-id': {
     description:
-      'the id of the user to be listed as the author of an action message (eg. "User un/resolved this thread") on certain changes to a thread',
+      'The id of the user to be listed as the author of an action message (eg. "User un/resolved this thread") on certain changes to a thread',
     nargs: 1,
     string: true,
   },
   typing: {
     description:
-      "a json array of user ids to mark them as typing in this thread. Pass an empty array to clear all users' typing indicators",
+      "A json array of user ids to mark them as typing in this thread. Pass an empty array to clear all users' typing indicators",
     nargs: 1,
     string: true,
   },
   resolved: {
-    description: 'whether the thread is resolved',
+    description: 'Whether the thread is resolved',
     nargs: 1,
     boolean: true,
   },
@@ -124,39 +124,39 @@ type UpdateThreadOptionsT = IdPositionalT &
 export const threadCommand = {
   command: 'thread',
   describe:
-    'manipulate threads. For more info refer to docs: https://docs.cord.com/rest-apis/threads',
+    'Manipulate threads. For more info refer to docs: https://docs.cord.com/rest-apis/threads',
   builder: (yargs: Argv) => {
     return yargs
       .demand(1)
-      .positional('id', idPositional.id)
       .command(
         'get <id>',
-        'get a thread summary',
-        (yargs) => yargs,
+        'Get a thread summary',
+        (yargs: Argv) => yargs.positional('id', idPositional.id),
         getThreadHandler,
       )
       .command(
         'get-messages <id>',
-        'get messages in a thread',
-        (yargs) => yargs,
+        'Get messages in a thread',
+        (yargs: Argv) => yargs.positional('id', idPositional.id),
         getThreadMessagesHandler,
       )
       .command(
         'ls',
-        'list all threads',
+        'List all threads',
         (yargs) => yargs,
         listAllThreadsHandler,
       )
       .command(
         'update <id>',
-        'update a thread',
-        (yargs: Argv<IdPositionalT>) => yargs.options(updateThreadOptions),
+        'Update a thread',
+        (yargs: Argv) =>
+          yargs.positional('id', idPositional.id).options(updateThreadOptions),
         updateThreadHandler,
       )
       .command(
         'delete <id>',
-        'delete a thread',
-        (yargs) => yargs,
+        'Delete a thread',
+        (yargs: Argv) => yargs.positional('id', idPositional.id),
         deleteThreadHandler,
       );
   },
