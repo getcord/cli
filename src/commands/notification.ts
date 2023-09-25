@@ -3,13 +3,32 @@ import { fetchCordRESTApi } from 'src/fetchCordRESTApi';
 import { idPositional, userIdPositional } from 'src/positionalArgs';
 import type { IdPositionalT, UserIdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
+import { buildQueryParams } from 'src/utils';
 
-async function listAllNotificationsHandler(argv: UserIdPositionalT) {
+async function listAllNotificationsHandler(argv: ListAllNotificationsOptionsT) {
+  const options = [
+    {
+      field: 'filter',
+      value: argv.filter,
+    },
+  ];
+  const queryParams = buildQueryParams(options);
   const notifications = await fetchCordRESTApi(
-    `users/${argv['user-id']}/notifications`,
+    `users/${argv['user-id']}/notifications${queryParams}`,
   );
   prettyPrint(notifications);
 }
+
+const listAllNotificationsParameters = {
+  filter: {
+    description: 'Filter object as a json string',
+    nargs: 1,
+    string: true,
+  },
+} as const;
+
+type ListAllNotificationsOptionsT = UserIdPositionalT &
+  InferredOptionTypes<typeof listAllNotificationsParameters>;
 
 async function createNotificationHandler(argv: CreateNotificationOptionsT) {
   const body = {
@@ -97,7 +116,9 @@ export const notificationCommand = {
         'ls <user-id>',
         'List all notifications a user has received',
         (yargs: Argv) =>
-          yargs.positional('user-id', userIdPositional['user-id']),
+          yargs
+            .positional('user-id', userIdPositional['user-id'])
+            .options(listAllNotificationsParameters),
         listAllNotificationsHandler,
       )
       .command(

@@ -11,7 +11,7 @@ import type { IdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
 import { buildQueryParams } from 'src/utils';
 
-async function listAllUsersHandler(argv: ListAllUsersOptionT) {
+async function listAllUsersHandler(argv: ListAllUsersOptionsT) {
   const options = [
     {
       field: 'token',
@@ -138,7 +138,7 @@ type UpdateUserPresenceOptionsT = IdPositionalT &
 type DeleteUserOptionsT = IdPositionalT &
   InferredOptionTypes<typeof deleteUserOptions>;
 
-const listAllUsersOptions = {
+const listAllUsersParameters = {
   limit: {
     description: 'Max number of users to return',
     nargs: 1,
@@ -155,7 +155,7 @@ const listAllUsersOptions = {
     string: true,
   },
 } as const;
-type ListAllUsersOptionT = InferredOptionTypes<typeof listAllUsersOptions>;
+type ListAllUsersOptionsT = InferredOptionTypes<typeof listAllUsersParameters>;
 
 const createOrUpdateUserOptions = {
   email: {
@@ -214,7 +214,7 @@ export const userCommand = {
       .command(
         'ls',
         'List all users',
-        (yargs: Argv<IdPositionalT>) => yargs.options(listAllUsersOptions),
+        (yargs: Argv<IdPositionalT>) => yargs.options(listAllUsersParameters),
         listAllUsersHandler,
       )
       .command('get <id>', 'get a user', (yargs) => yargs, getUserHandler)

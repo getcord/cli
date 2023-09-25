@@ -4,6 +4,7 @@ import { fetchCordRESTApi } from 'src/fetchCordRESTApi';
 import { idPositional } from 'src/positionalArgs';
 import type { IdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
+import { buildQueryParams } from 'src/utils';
 
 const threadIdOption = {
   'thread-id': {
@@ -26,8 +27,19 @@ const optionalIdPositional = {
 
 type OptionalIdPositionalT = InferredOptionTypes<typeof optionalIdPositional>;
 
-async function listAllMessagesHandler() {
-  const messages = await fetchCordRESTApi(`messages`);
+async function listAllMessagesHandler(argv: ListAllMessageOptionsT) {
+  const options = [
+    {
+      field: 'token',
+      value: argv.token,
+    },
+    {
+      field: 'limit',
+      value: argv.limit,
+    },
+  ];
+  const queryParams = buildQueryParams(options);
+  const messages = await fetchCordRESTApi(`messages${queryParams}`);
   prettyPrint(messages);
 }
 
@@ -120,6 +132,23 @@ async function deleteMessageHandler(argv: IdPositionalT & ThreadIDOptionT) {
   );
   prettyPrint(result);
 }
+
+const listAllMessagesParameters = {
+  limit: {
+    description: 'Max number of messages to return',
+    nargs: 1,
+    number: true,
+  },
+  token: {
+    description: 'Pagination token',
+    nargs: 1,
+    string: true,
+  },
+} as const;
+
+type ListAllMessageOptionsT = InferredOptionTypes<
+  typeof listAllMessagesParameters
+>;
 
 const createOrUpdateBaseMessageOptions = {
   'add-reactions': {
@@ -227,7 +256,7 @@ export const messageCommand = {
       .command(
         'ls',
         'List all messages',
-        (yargs) => yargs,
+        (yargs: Argv) => yargs.options(listAllMessagesParameters),
         listAllMessagesHandler,
       )
       .command(

@@ -9,21 +9,37 @@ import { fetchCordRESTApi } from 'src/fetchCordRESTApi';
 import { idPositional } from 'src/positionalArgs';
 import type { IdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
+import { buildQueryParams } from 'src/utils';
 
 async function getThreadHandler(argv: IdPositionalT) {
   const thread = await fetchCordRESTApi<CoreThreadData>(`threads/${argv.id}`);
   prettyPrint(thread);
 }
 
-async function getThreadMessagesHandler(argv: IdPositionalT) {
+async function getThreadMessagesHandler(argv: GetMessageOptions) {
+  const options = [
+    {
+      field: 'sortDirection',
+      value: argv['sort-direction'],
+    },
+  ];
+  const queryParams = buildQueryParams(options);
+
   const messages = await fetchCordRESTApi<CoreMessageData>(
-    `threads/${argv.id}/messages`,
+    `threads/${argv.id}/messages${queryParams}`,
   );
   prettyPrint(messages);
 }
 
-async function listAllThreadsHandler() {
-  const threads = await fetchCordRESTApi<ThreadData[]>(`threads`);
+async function listAllThreadsHandler(argv: ListAllThreadsOptionsT) {
+  const options = [
+    {
+      field: 'filter',
+      value: argv.filter,
+    },
+  ];
+  const queryParams = buildQueryParams(options);
+  const threads = await fetchCordRESTApi<ThreadData[]>(`threads${queryParams}`);
   prettyPrint(threads);
 }
 
@@ -57,6 +73,30 @@ async function updateThreadHandler(argv: UpdateThreadOptionsT) {
   );
   prettyPrint(result);
 }
+
+const listAllThreadsParameters = {
+  filter: {
+    description: 'Partial match filter object as a json string',
+    nargs: 1,
+    string: true,
+  },
+} as const;
+
+type ListAllThreadsOptionsT = InferredOptionTypes<
+  typeof listAllThreadsParameters
+>;
+
+const getMessagesParameters = {
+  'sort-direction': {
+    description:
+      'returns messages in ascending or descending order of creation timestamp',
+    nargs: 1,
+    choices: ['ascending', 'descending'],
+  },
+} as const;
+
+type GetMessageOptions = IdPositionalT &
+  InferredOptionTypes<typeof getMessagesParameters>;
 
 const updateThreadOptions = {
   name: {
@@ -137,13 +177,16 @@ export const threadCommand = {
       .command(
         'get-messages <id>',
         'Get messages in a thread',
-        (yargs: Argv) => yargs.positional('id', idPositional.id),
+        (yargs: Argv) =>
+          yargs
+            .positional('id', idPositional.id)
+            .options(getMessagesParameters),
         getThreadMessagesHandler,
       )
       .command(
         'ls',
         'List all threads',
-        (yargs) => yargs,
+        (yargs: Argv) => yargs.options(listAllThreadsParameters),
         listAllThreadsHandler,
       )
       .command(
