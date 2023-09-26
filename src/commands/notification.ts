@@ -92,8 +92,8 @@ const createNotificationOptions = {
   type: {
     description: 'Currently must be set to "url"',
     nargs: 1,
-    string: true,
-    default: 'url',
+    choices: ['url'],
+    demandOption: true,
   },
 } as const;
 type CreateNotificationOptionsT = InferredOptionTypes<

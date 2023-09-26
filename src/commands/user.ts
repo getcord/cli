@@ -187,10 +187,10 @@ const deleteUserOptions = {
 
 const updatePreferencesOptions = {
   key: {
-    description: 'Preference key. Defaults to "notification_channels"',
+    description: 'Preference key.',
     nargs: 1,
-    string: true,
-    default: 'notification_channels',
+    choices: ['notification_channels'],
+    demandOption: true,
   },
   value: {
     description:
@@ -210,51 +210,65 @@ export const userCommand = {
   builder: (yargs: Argv) => {
     return yargs
       .demand(1)
-      .positional('id', idPositional.id)
       .command(
         'ls',
         'List all users',
-        (yargs: Argv<IdPositionalT>) => yargs.options(listAllUsersParameters),
+        (yargs: Argv) => yargs.options(listAllUsersParameters),
         listAllUsersHandler,
       )
-      .command('get <id>', 'get a user', (yargs) => yargs, getUserHandler)
+      .command(
+        'get <id>',
+        'get a user',
+        (yargs: Argv) => yargs.positional('id', idPositional.id),
+        getUserHandler,
+      )
       .command(
         'create <id>',
         'Create a user',
-        (yargs: Argv<IdPositionalT>) =>
-          yargs.options(createOrUpdateUserOptions),
+        (yargs: Argv) =>
+          yargs
+            .options(createOrUpdateUserOptions)
+            .positional('id', idPositional.id),
         createOrUpdateUserHandler,
       )
       .command(
         'update <id>',
         'Update a user',
-        (yargs: Argv<IdPositionalT>) =>
-          yargs.options(createOrUpdateUserOptions),
+        (yargs: Argv) =>
+          yargs
+            .options(createOrUpdateUserOptions)
+            .positional('id', idPositional.id),
         createOrUpdateUserHandler,
       )
       .command(
         'update-presence <id>',
         "Update a user's location",
-        (yargs: Argv<IdPositionalT>) =>
-          yargs.options(updateUserPresenceOptions),
+        (yargs: Argv) =>
+          yargs
+            .options(updateUserPresenceOptions)
+            .positional('id', idPositional.id),
         updateUserPresenceHandler,
       )
       .command(
         'delete <id>',
         'Delete a user',
-        (yargs: Argv<IdPositionalT>) => yargs.options(deleteUserOptions),
+        (yargs: Argv) =>
+          yargs.options(deleteUserOptions).positional('id', idPositional.id),
         deleteUserHandler,
       )
       .command(
         'ls-preferences <id>',
         'List all preferences for a user',
-        (yargs: Argv<IdPositionalT>) => yargs,
+        (yargs: Argv) => yargs.positional('id', idPositional.id),
         listAllPreferencesHandler,
       )
       .command(
         'update-preferences <id>',
         'Update preferences for a user',
-        (yargs: Argv<IdPositionalT>) => yargs.options(updatePreferencesOptions),
+        (yargs: Argv) =>
+          yargs
+            .options(updatePreferencesOptions)
+            .positional('id', idPositional.id),
         updatePreferencesHandler,
       );
   },
