@@ -95,19 +95,19 @@ export const organizationCommand = {
       .demand(1)
       .command(
         'ls',
-        'List all organizations',
+        'List all organizations: GET https://api.cord.com/v1/organizations',
         (yargs) => yargs,
         listAllOrgsHandler,
       )
       .command(
         'get <id>',
-        'Get an organization',
+        'Get an organization: GET https://api.cord.com/v1/organizations/<ID>',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         getOrgHandler,
       )
       .command(
         'create <id>',
-        'Create an organization',
+        'Create an organization: PUT https://api.cord.com/v1/organizations/<ID>',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
@@ -116,7 +116,7 @@ export const organizationCommand = {
       )
       .command(
         'update <id>',
-        'Update an organization',
+        'Update an organization: PUT https://api.cord.com/v1/organizations/<ID>',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
@@ -125,13 +125,13 @@ export const organizationCommand = {
       )
       .command(
         'delete <id>',
-        'Delete an organization',
+        'Delete an organization: DELETE https://api.cord.com/v1/organizations/<ID>',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         deleteOrgHandler,
       )
       .command(
         'add-member <id>',
-        'Add a member to an organization',
+        'Add a member to an organization: POST https://api.cord.com/v1/organizations/<ID>/members',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
@@ -140,7 +140,7 @@ export const organizationCommand = {
       )
       .command(
         'remove-member <id>',
-        'Remove a member to an organization',
+        'Remove a member to an organization: POST https://api.cord.com/v1/organizations/<ID>/members',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)

@@ -153,25 +153,25 @@ export const applicationCommand = {
       .demand(1)
       .command(
         'ls',
-        'List all applications',
+        'List all applications: GET https://api.cord.com/v1/applications',
         (yargs) => yargs,
         listAllApplicationsHandler,
       )
       .command(
         'get <id>',
-        'Get an application',
+        'Get an application: GET https://api.cord.com/v1/applications/<ID>',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         getApplicationHandler,
       )
       .command(
         'create',
-        'Create an application',
+        'Create an application: POST https://api.cord.com/v1/applications',
         (yargs: Argv) => yargs.options(createApplicationOptions),
         createApplicationHandler,
       )
       .command(
         'update <id>',
-        'Update an application',
+        'Update an application: PUT https://api.cord.com/v1/applications/<ID>',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
@@ -180,7 +180,7 @@ export const applicationCommand = {
       )
       .command(
         'delete [--force] <id>',
-        'Delete an application',
+        'Delete an application: DELETE https://api.cord.com/v1/applications/<ID>',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)

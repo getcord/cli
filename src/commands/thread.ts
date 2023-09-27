@@ -170,13 +170,13 @@ export const threadCommand = {
       .demand(1)
       .command(
         'get <id>',
-        'Get a thread summary',
+        'Get a thread summary: GET https://api.cord.com/v1/threads/<ID>',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         getThreadHandler,
       )
       .command(
         'get-messages <id>',
-        'Get messages in a thread',
+        'Get messages in a thread: GET https://api.cord.com/v1/threads/<ID>/messages',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
@@ -185,19 +185,19 @@ export const threadCommand = {
       )
       .command(
         'ls',
-        'List all threads',
+        'List all threads: GET https://api.cord.com/v1/threads/',
         (yargs: Argv) => yargs.options(listAllThreadsParameters),
         listAllThreadsHandler,
       )
       .command(
         'update <id>',
-        'Update a thread',
+        'Update a thread: PUT https://api.cord.com/v1/threads/<ID>',
         (yargs: Argv) =>
           yargs.positional('id', idPositional.id).options(updateThreadOptions),
         updateThreadHandler,
       )
       .command(
-        'delete <id>',
+        'delete <id>: DELETE https://api.cord.com/v1/threads/<ID>',
         'Delete a thread',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         deleteThreadHandler,
