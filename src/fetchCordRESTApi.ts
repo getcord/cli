@@ -3,6 +3,7 @@ import {
   getApplicationManagementAuthToken,
   getServerAuthToken,
 } from '@cord-sdk/server';
+import { getEnvVariables } from 'src/utils';
 
 const CORD_API_URL = 'https://api.cord.com/v1';
 
@@ -11,14 +12,17 @@ export async function fetchCordRESTApi<T>(
   method: 'GET' | 'PUT' | 'POST' | 'DELETE' = 'GET',
   body?: string | FormData,
 ): Promise<T> {
-  const CORD_APP_ID = process.env.CORD_APP_ID;
-  const CORD_SECRET = process.env.CORD_SECRET;
-
-  if (!CORD_APP_ID || !CORD_SECRET) {
-    throw new Error('Missing CORD_APP_ID or CORD_SECRET in the environment');
+  const env = await getEnvVariables().catch(() => {
+    /*no-op. probably just doesn't exist yet*/
+  });
+  if (!env || !env.CORD_APP_ID || !env.CORD_APP_SECRET) {
+    throw new Error('Please initialize cord first. Run cord init.');
   }
 
-  const serverAuthToken = getServerAuthToken(CORD_APP_ID, CORD_SECRET);
+  const serverAuthToken = getServerAuthToken(
+    env.CORD_APP_ID,
+    env.CORD_APP_SECRET,
+  );
   const headers = {
     Authorization: `Bearer ${serverAuthToken}`,
     ...(typeof body === 'string' ? { 'Content-Type': 'application/json' } : {}),
@@ -44,18 +48,21 @@ export async function fetchCordManagementApi<T>(
   method: 'GET' | 'PUT' | 'POST' | 'DELETE' = 'GET',
   body?: string,
 ): Promise<T> {
-  const CORD_CUSTOMER_ID = process.env.CORD_CUSTOMER_ID;
-  const CORD_CUSTOMER_SECRET = process.env.CORD_CUSTOMER_SECRET;
-
-  if (!CORD_CUSTOMER_ID || !CORD_CUSTOMER_SECRET) {
+  const env = await getEnvVariables().catch(() => {
+    /*no-op. probably just doesn't exist yet*/
+  });
+  if (!env) {
+    throw new Error('Please initialize cord first. Run "cord init".');
+  }
+  if (!env.CORD_CUSTOMER_ID || !env.CORD_CUSTOMER_SECRET) {
     throw new Error(
-      'Missing CORD_CUSTOMER_ID or CORD_CUSTOMER_SECRET in the environment',
+      'Missing CORD_CUSTOMER_ID or CORD_CUSTOMER_SECRET, please run "cord init" and add these values.',
     );
   }
 
   const applicationManagementToken = getApplicationManagementAuthToken(
-    CORD_CUSTOMER_ID,
-    CORD_CUSTOMER_SECRET,
+    env.CORD_CUSTOMER_ID,
+    env.CORD_CUSTOMER_SECRET,
   );
 
   const response = await fetch(`${CORD_API_URL}/${endpoint}`, {

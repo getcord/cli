@@ -12,20 +12,19 @@ A CLI tool to make it easy to interact with our [REST API](https://docs.cord.com
 npm i -g @cord-sdk/cli
 ```
 
-2. Add environment variables:
+2. Initialize Cord:
 
-The `CORD_APP_ID` and `CORD_SECRET` values can be found in the [console](https://console.cord.com/applications) under the application you would like to interact with.
-
-The `CORD_CUSTOMER_ID` and `CORD_CUSTOMER_SECRET` are only needed ifyou need app management commands, which you probably don't. If you do, they can be found in the [console](https://console.cord.com/applications), under `View application management credentials`.
+Run
 
 ```bash
-  export CORD_APP_ID=<YOUR-APP-ID>
-  export CORD_SECRET=<YOUR-APP=SECRET>
-
-  # only needed for application management commands:
-  export CORD_CUSTOMER_ID=<YOUR-CUSTOMER-ID>
-  export CORD_CUSTOMER_SECRET=<YOUR-CUSTOMER-SECRET>
+cord init
 ```
+
+This command will ask you for some credentials and add them to a `.cord` file within your home directory. To run any command (other than `cord application`) you will need the `CORD_APP_ID` and `CORD_APP_SECRET` of the application you would like to query within. These values can be found in the [console](https://console.cord.com/applications) under this application entry.
+
+The `CORD_CUSTOMER_ID` and `CORD_CUSTOMER_SECRET` are only needed if you need app management commands, which you probably don't. If you do, they can be found in the [console](https://console.cord.com/applications), under `View application management credentials`.
+
+If you already have a `.cord` file and would like to re-configure your variables, running `cord init` will default to the existing values.
 
 <br/>
 

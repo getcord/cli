@@ -1,4 +1,5 @@
 import type { Argv, InferredOptionTypes } from 'yargs';
+import type { QuestionCollection } from 'inquirer';
 import inquirer from 'inquirer';
 import type {
   ApplicationData,
@@ -61,7 +62,7 @@ async function updateApplicationHandler(
   prettyPrint(result);
 }
 
-const confirmWithSecret = [
+const confirmWithSecret: QuestionCollection<{ secret: string }> = [
   {
     name: 'secret',
     message:

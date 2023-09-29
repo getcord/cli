@@ -8,6 +8,7 @@ import { applicationCommand } from 'src/commands/application';
 import { notificationCommand } from 'src/commands/notification';
 import { messageCommand } from 'src/commands/message';
 import { fileCommand } from 'src/commands/file';
+import { initCommand } from 'src/commands/init';
 
 async function main(): Promise<void> {
   await yargs(process.argv.slice(2))
@@ -15,6 +16,7 @@ async function main(): Promise<void> {
     .usage('$0 <cmd> [args]')
     .strict()
     .demand(1)
+    .command(initCommand)
     .command(organizationCommand)
     .command(threadCommand)
     .command(userCommand)
