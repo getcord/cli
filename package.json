@@ -38,7 +38,9 @@
   "dependencies": {
     "@cord-sdk/server": "^1.12.1",
     "esbuild": "^0.19.2",
+    "formdata-node": "^5.0.1",
     "inquirer": "^9.2.11",
+    "mime": "^3.0.0",
     "node-fetch": "^3.3.2",
     "yargs": "^17.7.2"
   }

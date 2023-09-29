@@ -7,6 +7,7 @@ import { organizationCommand } from 'src/commands/organization';
 import { applicationCommand } from 'src/commands/application';
 import { notificationCommand } from 'src/commands/notification';
 import { messageCommand } from 'src/commands/message';
+import { fileCommand } from 'src/commands/file';
 
 async function main(): Promise<void> {
   await yargs(process.argv.slice(2))
@@ -20,6 +21,7 @@ async function main(): Promise<void> {
     .command(applicationCommand)
     .command(notificationCommand)
     .command(messageCommand)
+    .command(fileCommand)
     .wrap(yargs().terminalWidth())
     .help().argv;
 

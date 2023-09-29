@@ -9,7 +9,7 @@ const CORD_API_URL = 'https://api.cord.com/v1';
 export async function fetchCordRESTApi<T>(
   endpoint: string,
   method: 'GET' | 'PUT' | 'POST' | 'DELETE' = 'GET',
-  body?: string,
+  body?: string | FormData,
 ): Promise<T> {
   const CORD_APP_ID = process.env.CORD_APP_ID;
   const CORD_SECRET = process.env.CORD_SECRET;
@@ -19,13 +19,14 @@ export async function fetchCordRESTApi<T>(
   }
 
   const serverAuthToken = getServerAuthToken(CORD_APP_ID, CORD_SECRET);
+  const headers = {
+    Authorization: `Bearer ${serverAuthToken}`,
+    ...(typeof body === 'string' ? { 'Content-Type': 'application/json' } : {}),
+  };
   const response = await fetch(`${CORD_API_URL}/${endpoint}`, {
     method,
     body,
-    headers: {
-      Authorization: `Bearer ${serverAuthToken}`,
-      'Content-Type': 'application/json',
-    },
+    headers,
   });
 
   if (response.ok) {
