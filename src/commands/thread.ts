@@ -100,7 +100,7 @@ type GetMessageOptions = IdPositionalT &
 
 const updateThreadOptions = {
   name: {
-    description: 'name of the thread',
+    description: 'Name of the thread',
     nargs: 1,
     string: true,
   },
@@ -197,8 +197,8 @@ export const threadCommand = {
         updateThreadHandler,
       )
       .command(
-        'delete <id>: DELETE https://api.cord.com/v1/threads/<ID>',
-        'Delete a thread',
+        'delete <id>',
+        'Delete a thread: DELETE https://api.cord.com/v1/threads/<ID>',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         deleteThreadHandler,
       );
