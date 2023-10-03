@@ -41,6 +41,7 @@ async function createOrUpdateUserHandler(argv: CreateOrUpdateUserOptionsT) {
     email: argv.email,
     name: argv.name,
     shortName: argv.shortName,
+    metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
   };
   const result = await fetchCordRESTApi(
     `users/${argv.id}`,
@@ -170,6 +171,11 @@ const createOrUpdateUserOptions = {
   },
   shortName: {
     description: 'Short (display) name of the user',
+    nargs: 1,
+    string: true,
+  },
+  metadata: {
+    description: 'Metadata of the user as a json string',
     nargs: 1,
     string: true,
   },
