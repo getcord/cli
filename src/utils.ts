@@ -17,7 +17,8 @@ export function buildQueryParams(
   return '?' + params.toString();
 }
 
-export const cordConfigPath = path.join(os.homedir(), '.cord');
+export const cordConfigPath =
+  process.env.CORD_CONFIG_PATH ?? path.join(os.homedir(), '.cord');
 const asyncFs = fs.promises;
 
 export async function getEnvVariables() {
