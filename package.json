@@ -1,0 +1,47 @@
+{
+  "name": "@cord-sdk/cli",
+  "version": "1.0.0",
+  "description": "CLI tool for Cord",
+  "main": "index.js",
+  "bin": {
+    "cord": "dist/index.js"
+  },
+  "files": [
+    "dist/index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run build-common -- --minify",
+    "dev": "tsc --watch --preserveWatchOutput & npm run build-common -- --watch",
+    "check": "tsc && eslint src",
+    "build-common": "esbuild src/index.ts --outdir=dist --bundle --sourcemap --platform=node"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@cord-sdk/types": "^1.12.1",
+    "@cspell/eslint-plugin": "^7.3.2",
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^20.5.7",
+    "@types/yargs": "^17.0.24",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-no-relative-import-paths": "^1.5.2",
+    "eslint-plugin-prettier": "^5.0.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@cord-sdk/server": "^1.12.1",
+    "esbuild": "^0.19.2",
+    "formdata-node": "^5.0.1",
+    "inquirer": "^9.2.11",
+    "mime": "^3.0.0",
+    "node-fetch": "^3.3.2",
+    "yargs": "^17.7.2"
+  }
+}
