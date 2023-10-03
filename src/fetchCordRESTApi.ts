@@ -5,7 +5,7 @@ import {
 } from '@cord-sdk/server';
 import { getEnvVariables } from 'src/utils';
 
-const CORD_API_URL = 'https://api.cord.com/v1';
+const DEFAULT_CORD_API_URL = 'https://api.cord.com/v1';
 
 export async function fetchCordRESTApi<T>(
   endpoint: string,
@@ -19,6 +19,8 @@ export async function fetchCordRESTApi<T>(
     throw new Error('Please initialize cord first. Run cord init.');
   }
 
+  const api_url = env.CORD_API_URL ?? DEFAULT_CORD_API_URL;
+
   const serverAuthToken = getServerAuthToken(
     env.CORD_APP_ID,
     env.CORD_APP_SECRET,
@@ -27,7 +29,7 @@ export async function fetchCordRESTApi<T>(
     Authorization: `Bearer ${serverAuthToken}`,
     ...(typeof body === 'string' ? { 'Content-Type': 'application/json' } : {}),
   };
-  const response = await fetch(`${CORD_API_URL}/${endpoint}`, {
+  const response = await fetch(`${api_url}/${endpoint}`, {
     method,
     body,
     headers,
@@ -60,12 +62,14 @@ export async function fetchCordManagementApi<T>(
     );
   }
 
+  const api_url = env.CORD_API_URL ?? DEFAULT_CORD_API_URL;
+
   const applicationManagementToken = getApplicationManagementAuthToken(
     env.CORD_CUSTOMER_ID,
     env.CORD_CUSTOMER_SECRET,
   );
 
-  const response = await fetch(`${CORD_API_URL}/${endpoint}`, {
+  const response = await fetch(`${api_url}/${endpoint}`, {
     method,
     body,
     headers: {
