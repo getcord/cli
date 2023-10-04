@@ -48,6 +48,7 @@ async function initializeCord() {
       message:
         'Will you be running any application management commands? (You will need extra credentials):',
       type: 'confirm',
+      default: false,
     },
     {
       name: 'CORD_CUSTOMER_ID',

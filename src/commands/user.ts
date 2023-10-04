@@ -40,7 +40,9 @@ async function createOrUpdateUserHandler(argv: CreateOrUpdateUserOptionsT) {
   const update: ServerUpdateUser = {
     email: argv.email,
     name: argv.name,
-    shortName: argv.shortName,
+    shortName: argv['short-name'],
+    status: argv.status,
+    profilePictureURL: argv['profile-picture'],
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
   };
   const result = await fetchCordRESTApi(
@@ -169,13 +171,23 @@ const createOrUpdateUserOptions = {
     nargs: 1,
     string: true,
   },
-  shortName: {
+  'short-name': {
     description: 'Short (display) name of the user',
     nargs: 1,
     string: true,
   },
   metadata: {
     description: 'Metadata of the user as a json string',
+    nargs: 1,
+    string: true,
+  },
+  status: {
+    description: 'Whether the user is active or deleted',
+    nargs: 1,
+    choices: ['active', 'deleted'],
+  },
+  'profile-picture': {
+    description: "URL of the user's profile picture",
     nargs: 1,
     string: true,
   },

@@ -26,6 +26,7 @@ async function createOrUpdateOrgHandler(argv: CreateOrUpdateOrgOptionsT) {
   const update: ServerUpdateOrganization = {
     name: argv.name,
     status: argv.status,
+    members: argv.members ? JSON.parse(argv.members) : undefined,
   };
   const result = await fetchCordRESTApi(
     `organizations/${argv.id}`,
@@ -70,6 +71,12 @@ const createOrUpdateOrgOptions = {
     description: 'Active status of the organization',
     nargs: 1,
     choices: ['active', 'deleted'],
+  },
+  members: {
+    description:
+      'List of user IDs to be a part of this organization as a json string. This will replace the existing set of members',
+    nargs: 1,
+    string: true,
   },
 } as const;
 type CreateOrUpdateOrgOptionsT = IdPositionalT &
