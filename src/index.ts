@@ -9,6 +9,7 @@ import { notificationCommand } from 'src/commands/notification';
 import { messageCommand } from 'src/commands/message';
 import { fileCommand } from 'src/commands/file';
 import { initCommand } from 'src/commands/init';
+import packageData from 'package.json';
 
 async function main(): Promise<void> {
   await yargs(process.argv.slice(2))
@@ -24,6 +25,7 @@ async function main(): Promise<void> {
     .command(notificationCommand)
     .command(messageCommand)
     .command(fileCommand)
+    .version(packageData.version)
     .wrap(yargs().terminalWidth())
     .help().argv;
 
