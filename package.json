@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "CLI tool for Cord",
   "main": "index.js",
+  "homepage": "https://docs.cord.com/reference/cord-cli",
   "bin": {
     "cord": "dist/index.js"
   },
@@ -11,6 +12,10 @@
     "README.md",
     "LICENSE"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/getcord/cli"
+  },
   "scripts": {
     "build": "npm run build-common -- --minify",
     "dev": "tsc --watch --preserveWatchOutput & npm run build-common -- --watch",
@@ -28,6 +33,7 @@
     "@types/node": "^20.5.7",
     "@types/yargs": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "esbuild": "^0.19.2",
     "eslint": "^8.48.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-typescript": "^3.6.0",
@@ -38,7 +44,6 @@
   },
   "dependencies": {
     "@cord-sdk/server": "^1.12.1",
-    "esbuild": "^0.19.2",
     "formdata-node": "^5.0.1",
     "inquirer": "^9.2.11",
     "mime": "^3.0.0",
