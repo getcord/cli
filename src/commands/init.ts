@@ -22,7 +22,7 @@ async function initializeCord() {
     {
       name: 'CORD_APP_ID',
       default: defaultAnswers?.CORD_APP_ID,
-      message: 'The ID of the application you wish you query within:',
+      message: 'The ID of the application you wish to query within:',
       type: 'input',
       validate: (answer: string) => {
         if (answer.length < 1) {
