@@ -29,7 +29,14 @@ async function main(): Promise<void> {
     .wrap(yargs().terminalWidth())
     .help().argv;
 
-  process.exit(0);
+  // The OS might refuse a write to stdout, such as if it's a pipe and the pipe
+  // is full. If that happens, node will buffer writes for us, but we need to
+  // wait until it's had a chance to flush that buffer before we exit. So do a
+  // dummy write and exit when that dummy write is flushed so that we know that
+  // everything before it has been flushed too and we don't truncate our output.
+  process.stdout.write('', () => {
+    process.exit(0);
+  });
 }
 
 void main();
