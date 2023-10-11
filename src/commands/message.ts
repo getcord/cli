@@ -30,6 +30,10 @@ type OptionalIdPositionalT = InferredOptionTypes<typeof optionalIdPositional>;
 async function listAllMessagesHandler(argv: ListAllMessageOptionsT) {
   const options = [
     {
+      field: 'filter',
+      value: argv.filter,
+    },
+    {
       field: 'token',
       value: argv.token,
     },
@@ -141,6 +145,11 @@ const listAllMessagesParameters = {
   },
   token: {
     description: 'Pagination token',
+    nargs: 1,
+    string: true,
+  },
+  filter: {
+    description: 'Partial match filter object as a json string',
     nargs: 1,
     string: true,
   },
