@@ -28,6 +28,7 @@ export async function fetchCordRESTApi<T>(
   const headers = {
     Authorization: `Bearer ${serverAuthToken}`,
     ...(typeof body === 'string' ? { 'Content-Type': 'application/json' } : {}),
+    'X-Cord-Source': 'cli',
   };
   const response = await fetch(`${api_url}/${endpoint}`, {
     method,
