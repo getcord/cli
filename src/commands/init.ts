@@ -1,9 +1,8 @@
-import fs from 'fs';
 import type { Argv } from 'yargs';
 import type { QuestionCollection } from 'inquirer';
 import inquirer from 'inquirer';
 import { prettyPrint } from 'src/prettyPrint';
-import { getEnvVariables, cordConfigPath } from 'src/utils';
+import { getEnvVariables, updateEnvVariables } from 'src/utils';
 
 async function initializeCord() {
   const defaultAnswers = await getEnvVariables().catch(() => {
@@ -78,23 +77,18 @@ async function initializeCord() {
   const includeCustomerSecret =
     CORD_CUSTOMER_SECRET && CORD_CUSTOMER_SECRET.trim().length > 0;
 
-  fs.writeFileSync(
-    cordConfigPath,
-    `CORD_APP_ID=${CORD_APP_ID}
-CORD_APP_SECRET=${CORD_APP_SECRET}
-${includeCustomerID ? `CORD_CUSTOMER_ID=${CORD_CUSTOMER_ID}` : ''}
-${includeCustomerSecret ? `CORD_CUSTOMER_SECRET=${CORD_CUSTOMER_SECRET}` : ''}
-  `,
-  );
-  console.log(
-    'These variables have now been added to a .cord file in your home directory:',
-  );
-  prettyPrint({
+  const variablesToAdd = {
     CORD_APP_ID,
     CORD_APP_SECRET,
     ...(includeCustomerID ? { CORD_CUSTOMER_ID } : {}),
     ...(includeCustomerSecret ? { CORD_CUSTOMER_SECRET } : {}),
-  });
+  };
+
+  await updateEnvVariables(variablesToAdd);
+  console.log(
+    'These variables have now been added to a .cord file in your home directory:',
+  );
+  prettyPrint(variablesToAdd);
 
   if (includeCustomerID && !includeCustomerSecret) {
     console.log(
