@@ -28,6 +28,7 @@
   "devDependencies": {
     "@cord-sdk/types": "^1.12.1",
     "@cspell/eslint-plugin": "^7.3.2",
+    "@types/cli-box": "^6.0.2",
     "@types/inquirer": "^9.0.3",
     "@types/mime": "^3.0.2",
     "@types/node": "^20.5.7",
@@ -44,6 +45,8 @@
   },
   "dependencies": {
     "@cord-sdk/server": "^1.12.1",
+    "chalk": "^5.3.0",
+    "cli-box": "^6.0.10",
     "formdata-node": "^5.0.1",
     "inquirer": "^9.2.11",
     "mime": "^3.0.0",

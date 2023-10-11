@@ -35,3 +35,19 @@ export async function getEnvVariables() {
   }
   return env;
 }
+
+export async function updateEnvVariables(newVariables: {
+  [key: string]: string;
+}) {
+  const existingVariables = await getEnvVariables().catch(() => {
+    /*no-op. probably just doesn't exist yet*/
+  });
+  const updatedVariables = {
+    ...existingVariables,
+    ...newVariables,
+  };
+  const envString = Object.entries(updatedVariables)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('\n');
+  fs.writeFileSync(cordConfigPath, envString);
+}

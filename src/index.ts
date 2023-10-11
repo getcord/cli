@@ -9,9 +9,11 @@ import { notificationCommand } from 'src/commands/notification';
 import { messageCommand } from 'src/commands/message';
 import { fileCommand } from 'src/commands/file';
 import { initCommand } from 'src/commands/init';
+import { checkVersion } from 'src/checkVersion';
 import packageData from 'package.json';
 
 async function main(): Promise<void> {
+  await checkVersion();
   await yargs(process.argv.slice(2))
     .scriptName('cord')
     .usage('$0 <cmd> [args]')
