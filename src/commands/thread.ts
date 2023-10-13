@@ -37,6 +37,14 @@ async function listAllThreadsHandler(argv: ListAllThreadsOptionsT) {
       field: 'filter',
       value: argv.filter,
     },
+    {
+      field: 'token',
+      value: argv.token,
+    },
+    {
+      field: 'limit',
+      value: argv.limit,
+    },
   ];
   const queryParams = buildQueryParams(options);
   const threads = await fetchCordRESTApi<ThreadData[]>(`threads${queryParams}`);
@@ -77,6 +85,16 @@ async function updateThreadHandler(argv: UpdateThreadOptionsT) {
 const listAllThreadsParameters = {
   filter: {
     description: 'Partial match filter object as a json string',
+    nargs: 1,
+    string: true,
+  },
+  limit: {
+    description: 'Max number of threads to return',
+    nargs: 1,
+    number: true,
+  },
+  token: {
+    description: 'Pagination token',
     nargs: 1,
     string: true,
   },
