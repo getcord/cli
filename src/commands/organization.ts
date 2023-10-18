@@ -22,7 +22,7 @@ async function getOrgHandler(argv: IdPositionalT) {
   prettyPrint(org);
 }
 
-async function createOrUpdateOrgHandler(argv: CreateOrUpdateOrgOptionsT) {
+async function createOrUpdateOrgHandler(argv: CreateOrUpdateBaseOrgOptionsT) {
   const update: ServerUpdateOrganization = {
     name: argv.name,
     status: argv.status,
@@ -61,7 +61,7 @@ async function removeMemberOrgHandler(argv: AddRemoveMemberOptionsT) {
   prettyPrint(result);
 }
 
-const createOrUpdateOrgOptions = {
+const createOrUpdateBaseOrgOptions = {
   name: {
     description: 'Name of the organization',
     nargs: 1,
@@ -79,8 +79,16 @@ const createOrUpdateOrgOptions = {
     string: true,
   },
 } as const;
-type CreateOrUpdateOrgOptionsT = IdPositionalT &
-  InferredOptionTypes<typeof createOrUpdateOrgOptions>;
+type CreateOrUpdateBaseOrgOptionsT = IdPositionalT &
+  InferredOptionTypes<typeof createOrUpdateBaseOrgOptions>;
+
+const createOrgOptions = {
+  ...createOrUpdateBaseOrgOptions,
+  name: {
+    ...createOrUpdateBaseOrgOptions.name,
+    demandOption: true,
+  },
+} as const;
 
 const addRemoveMemberOptions = {
   user: {
@@ -116,9 +124,7 @@ export const organizationCommand = {
         'create <id>',
         'Create an organization: PUT https://api.cord.com/v1/organizations/<ID>',
         (yargs: Argv) =>
-          yargs
-            .positional('id', idPositional.id)
-            .options(createOrUpdateOrgOptions),
+          yargs.positional('id', idPositional.id).options(createOrgOptions),
         createOrUpdateOrgHandler,
       )
       .command(
@@ -127,7 +133,7 @@ export const organizationCommand = {
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
-            .options(createOrUpdateOrgOptions),
+            .options(createOrUpdateBaseOrgOptions),
         createOrUpdateOrgHandler,
       )
       .command(
