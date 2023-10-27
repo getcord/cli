@@ -68,7 +68,7 @@ async function deleteUserHandler(argv: DeleteUserOptionsT) {
 
 async function updateUserPresenceHandler(argv: UpdateUserPresenceOptionsT) {
   const body: ServerUpdatePresence = {
-    organizationID: argv['organization-id'],
+    groupID: argv['group-id'],
     location: JSON.parse(argv.location),
     durable: argv.durable,
     absent: argv.absent,
@@ -103,8 +103,9 @@ async function updatePreferencesHandler(argv: UpdatePreferencesOptionsT) {
 }
 
 const updateUserPresenceOptions = {
-  'organization-id': {
-    description: 'The organization the user belongs to',
+  'group-id': {
+    alias: 'organization-id',
+    description: 'The group the user belongs to',
     nargs: 1,
     string: true,
     demandOption: true,

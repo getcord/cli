@@ -62,7 +62,7 @@ async function updateThreadHandler(argv: UpdateThreadOptionsT) {
     resolved: argv.resolved,
     url: argv.url,
     id: argv['new-id'],
-    organizationID: argv['organization-id'],
+    groupID: argv['group-id'],
     extraClassnames: argv['extra-classnames'],
     userID: argv['user-id'],
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
@@ -137,8 +137,9 @@ const updateThreadOptions = {
     nargs: 1,
     string: true,
   },
-  'organization-id': {
-    description: 'The organization id this thread is in',
+  'group-id': {
+    alias: 'organization-id',
+    description: 'The group id this thread is in',
     nargs: 1,
     string: true,
   },

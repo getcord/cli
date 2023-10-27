@@ -1,9 +1,9 @@
 import type { Argv, InferredOptionTypes } from 'yargs';
 import type {
-  ServerGetOrganization,
-  ServerListOrganization,
-  ServerUpdateOrganization,
-  ServerUpdateOrganizationMembers,
+  ServerGetGroup,
+  ServerListGroup,
+  ServerUpdateGroup,
+  ServerUpdateGroupMembers,
 } from '@cord-sdk/types';
 import { fetchCordRESTApi } from 'src/fetchCordRESTApi';
 import { idPositional } from 'src/positionalArgs';
@@ -11,25 +11,23 @@ import type { IdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
 
 async function listAllOrgsHandler() {
-  const orgs = await fetchCordRESTApi<ServerListOrganization>(`organizations`);
+  const orgs = await fetchCordRESTApi<ServerListGroup>(`groups`);
   prettyPrint(orgs);
 }
 
 async function getOrgHandler(argv: IdPositionalT) {
-  const org = await fetchCordRESTApi<ServerGetOrganization>(
-    `organizations/${argv.id}`,
-  );
+  const org = await fetchCordRESTApi<ServerGetGroup>(`groups/${argv.id}`);
   prettyPrint(org);
 }
 
 async function createOrUpdateOrgHandler(argv: CreateOrUpdateBaseOrgOptionsT) {
-  const update: ServerUpdateOrganization = {
+  const update: ServerUpdateGroup = {
     name: argv.name,
     status: argv.status,
     members: argv.members ? JSON.parse(argv.members) : undefined,
   };
   const result = await fetchCordRESTApi(
-    `organizations/${argv.id}`,
+    `groups/${argv.id}`,
     'PUT',
     JSON.stringify(update),
   );
@@ -37,14 +35,14 @@ async function createOrUpdateOrgHandler(argv: CreateOrUpdateBaseOrgOptionsT) {
 }
 
 async function deleteOrgHandler(argv: IdPositionalT) {
-  const result = await fetchCordRESTApi(`organizations/${argv.id}`, 'DELETE');
+  const result = await fetchCordRESTApi(`groups/${argv.id}`, 'DELETE');
   prettyPrint(result);
 }
 
 async function addMemberOrgHandler(argv: AddRemoveMemberOptionsT) {
-  const update: ServerUpdateOrganizationMembers = { add: [argv.user] };
+  const update: ServerUpdateGroupMembers = { add: [argv.user] };
   const result = await fetchCordRESTApi(
-    `organizations/${argv.id}/members`,
+    `groups/${argv.id}/members`,
     'POST',
     JSON.stringify(update),
   );
@@ -52,9 +50,9 @@ async function addMemberOrgHandler(argv: AddRemoveMemberOptionsT) {
 }
 
 async function removeMemberOrgHandler(argv: AddRemoveMemberOptionsT) {
-  const update: ServerUpdateOrganizationMembers = { remove: [argv.user] };
+  const update: ServerUpdateGroupMembers = { remove: [argv.user] };
   const result = await fetchCordRESTApi(
-    `organizations/${argv.id}/members`,
+    `groups/${argv.id}/members`,
     'POST',
     JSON.stringify(update),
   );
@@ -63,18 +61,18 @@ async function removeMemberOrgHandler(argv: AddRemoveMemberOptionsT) {
 
 const createOrUpdateBaseOrgOptions = {
   name: {
-    description: 'Name of the organization',
+    description: 'Name of the group',
     nargs: 1,
     string: true,
   },
   status: {
-    description: 'Active status of the organization',
+    description: 'Active status of the group',
     nargs: 1,
     choices: ['active', 'deleted'],
   },
   members: {
     description:
-      'List of user IDs to be a part of this organization as a json string. This will replace the existing set of members',
+      'List of user IDs to be a part of this group as a json string. This will replace the existing set of members',
     nargs: 1,
     string: true,
   },
@@ -101,35 +99,35 @@ const addRemoveMemberOptions = {
 type AddRemoveMemberOptionsT = IdPositionalT &
   InferredOptionTypes<typeof addRemoveMemberOptions>;
 
-export const organizationCommand = {
-  command: ['organization', 'org'],
+export const groupCommand = {
+  command: ['group', 'organization', 'org'],
   describe:
-    'Manipulate organizations. For more info refer to docs: https://docs.cord.com/rest-apis/organizations',
+    'Manipulate groups. For more info refer to docs: https://docs.cord.com/rest-apis/groups',
   builder: (yargs: Argv) => {
     return yargs
       .demand(1)
       .command(
         'ls',
-        'List all organizations: GET https://api.cord.com/v1/organizations',
+        'List all groups: GET https://api.cord.com/v1/groups',
         (yargs) => yargs,
         listAllOrgsHandler,
       )
       .command(
         'get <id>',
-        'Get an organization: GET https://api.cord.com/v1/organizations/<ID>',
+        'Get a group: GET https://api.cord.com/v1/groups/<ID>',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         getOrgHandler,
       )
       .command(
         'create <id>',
-        'Create an organization: PUT https://api.cord.com/v1/organizations/<ID>',
+        'Create a group: PUT https://api.cord.com/v1/groups/<ID>',
         (yargs: Argv) =>
           yargs.positional('id', idPositional.id).options(createOrgOptions),
         createOrUpdateOrgHandler,
       )
       .command(
         'update <id>',
-        'Update an organization: PUT https://api.cord.com/v1/organizations/<ID>',
+        'Update a group: PUT https://api.cord.com/v1/groups/<ID>',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
@@ -138,13 +136,13 @@ export const organizationCommand = {
       )
       .command(
         'delete <id>',
-        'Delete an organization: DELETE https://api.cord.com/v1/organizations/<ID>',
+        'Delete a group: DELETE https://api.cord.com/v1/groups/<ID>',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         deleteOrgHandler,
       )
       .command(
         'add-member <id>',
-        'Add a member to an organization: POST https://api.cord.com/v1/organizations/<ID>/members',
+        'Add a member to a group: POST https://api.cord.com/v1/groups/<ID>/members',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
@@ -153,7 +151,7 @@ export const organizationCommand = {
       )
       .command(
         'remove-member <id>',
-        'Remove a member to an organization: POST https://api.cord.com/v1/organizations/<ID>/members',
+        'Remove a member from a group: POST https://api.cord.com/v1/groups/<ID>/members',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
