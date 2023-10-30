@@ -32,7 +32,7 @@ export async function checkVersion() {
 To update from ${chalk.bold(packageData.version)} to ${chalk.bold(
         publishedVersion,
       )} run:
-npm update @cord-sdk/cli\n`,
+npm update -g @cord-sdk/cli\n`,
     );
     process.stderr.write(box.stringify() + '\n');
   }
