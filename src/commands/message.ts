@@ -64,6 +64,7 @@ async function createMessageHandler(
     authorID: argv['author-id'],
     extraClassnames: argv['extra-classnames'],
     iconURL: argv['icon-url'],
+    translationKey: argv['translation-key'],
     content: argv.content ? JSON.parse(argv.content) : undefined,
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
     addReactions: argv['add-reactions']
@@ -103,6 +104,7 @@ async function updateMessageHandler(argv: UpdateMessageOptionsT) {
     authorID: argv['author-id'],
     extraClassnames: argv['extra-classnames'],
     iconURL: argv['icon-url'],
+    translationKey: argv['translation-key'],
     content: argv.content ? JSON.parse(argv.content) : undefined,
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
     addReactions: argv['add-reactions']
@@ -182,6 +184,11 @@ const createOrUpdateBaseMessageOptions = {
   },
   'icon-url': {
     description: 'Url of the icon to show next to an action message',
+    nargs: 1,
+    string: true,
+  },
+  'translation-key': {
+    description: 'Translation key to use for this message',
     nargs: 1,
     string: true,
   },
