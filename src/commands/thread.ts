@@ -4,12 +4,22 @@ import type {
   CoreThreadData,
   ThreadData,
   ServerUpdateThread,
+  ServerCreateThread,
 } from '@cord-sdk/types';
 import { fetchCordRESTApi } from 'src/fetchCordRESTApi';
 import { idPositional } from 'src/positionalArgs';
 import type { IdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
 import { buildQueryParams } from 'src/utils';
+
+const optionalIdPositional = {
+  id: {
+    description: 'ID of the thread',
+    nargs: 1,
+    string: true,
+  },
+} as const;
+type OptionalIdPositionalT = InferredOptionTypes<typeof optionalIdPositional>;
 
 async function getThreadHandler(argv: IdPositionalT) {
   const thread = await fetchCordRESTApi<CoreThreadData>(`threads/${argv.id}`);
@@ -29,6 +39,28 @@ async function getThreadMessagesHandler(argv: GetMessageOptions) {
     `threads/${argv.id}/messages${queryParams}`,
   );
   prettyPrint(messages);
+}
+
+async function createThreadHandler(
+  argv: CreateThreadOptionsT & OptionalIdPositionalT,
+) {
+  const body: ServerCreateThread = {
+    id: argv.id,
+    name: argv.name,
+    url: argv.url,
+    groupID: argv['group-id'],
+    location: JSON.parse(argv.location),
+    metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
+    extraClassnames: argv['extra-classnames'],
+  };
+
+  const result = await fetchCordRESTApi(
+    `threads`,
+    'POST',
+    JSON.stringify(body),
+  );
+
+  prettyPrint(result);
 }
 
 async function listAllThreadsHandler(argv: ListAllThreadsOptionsT) {
@@ -116,14 +148,9 @@ const getMessagesParameters = {
 type GetMessageOptions = IdPositionalT &
   InferredOptionTypes<typeof getMessagesParameters>;
 
-const updateThreadOptions = {
+const createOrUpdateBaseThreadOptions = {
   name: {
     description: 'Name of the thread',
-    nargs: 1,
-    string: true,
-  },
-  'new-id': {
-    description: 'Remove existing thread id and replace with this new one',
     nargs: 1,
     string: true,
   },
@@ -138,7 +165,6 @@ const updateThreadOptions = {
     string: true,
   },
   'group-id': {
-    alias: 'organization-id',
     description: 'The group id this thread is in',
     nargs: 1,
     string: true,
@@ -152,6 +178,40 @@ const updateThreadOptions = {
     description: 'The location of this thread as a json string',
     nargs: 1,
     string: true,
+  },
+} as const;
+
+const createThreadOptions = {
+  ...createOrUpdateBaseThreadOptions,
+  name: {
+    ...createOrUpdateBaseThreadOptions.name,
+    demandOption: true,
+  },
+  url: {
+    ...createOrUpdateBaseThreadOptions.url,
+    demandOption: true,
+  },
+  'group-id': {
+    ...createOrUpdateBaseThreadOptions['group-id'],
+    demandOption: true,
+  },
+  location: {
+    ...createOrUpdateBaseThreadOptions.location,
+    demandOption: true,
+  },
+} as const;
+
+type CreateThreadOptionsT = InferredOptionTypes<typeof createThreadOptions>;
+const updateThreadOptions = {
+  ...createOrUpdateBaseThreadOptions,
+  'new-id': {
+    description: 'Remove existing thread id and replace with this new one',
+    nargs: 1,
+    string: true,
+  },
+  'group-id': {
+    ...createOrUpdateBaseThreadOptions['group-id'],
+    alias: 'organization-id',
   },
   'resolved-timestamp': {
     description:
@@ -192,6 +252,15 @@ export const threadCommand = {
         'Get a thread summary: GET https://api.cord.com/v1/threads/<ID>',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         getThreadHandler,
+      )
+      .command(
+        'create [id]',
+        'Create a new thread: POST https://api.cord.com/v1/threads',
+        (yargs: Argv) =>
+          yargs
+            .options({ ...createThreadOptions })
+            .positional('id', optionalIdPositional.id),
+        createThreadHandler,
       )
       .command(
         'get-messages <id>',
