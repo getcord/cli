@@ -1,6 +1,6 @@
 {
   "name": "@cord-sdk/cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "CLI tool for Cord",
   "main": "index.js",
   "homepage": "https://docs.cord.com/reference/cord-cli",
