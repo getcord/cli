@@ -26,7 +26,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@cord-sdk/types": "^1.24.0",
+    "@cord-sdk/types": "^1.25.0",
     "@cspell/eslint-plugin": "^7.3.2",
     "@types/cli-box": "^6.0.2",
     "@types/inquirer": "^9.0.3",
@@ -44,7 +44,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@cord-sdk/server": "^1.24.0",
+    "@cord-sdk/server": "^1.25.0",
     "chalk": "^5.3.0",
     "cli-box": "^6.0.10",
     "formdata-node": "^5.0.1",
