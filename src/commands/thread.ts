@@ -52,7 +52,9 @@ async function createThreadHandler(
     location: JSON.parse(argv.location),
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
     extraClassnames: argv['extra-classnames'],
-    subscribers: argv.subscribers ? JSON.parse(argv.subscribers) : undefined,
+    addSubscribers: argv['add-subscribers']
+      ? JSON.parse(argv['add-subscribers'])
+      : undefined,
   };
 
   const result = await fetchCordRESTApi(
@@ -201,7 +203,7 @@ const createThreadOptions = {
     demandOption: true,
   },
   // subscribers is only in the createThreadOptions
-  subscribers: {
+  'add-subscribers': {
     description: 'A list of users to subscribe to this thread as a json string',
     nargs: 1,
     string: true,
