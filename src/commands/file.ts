@@ -15,7 +15,7 @@ async function uploadFileHandler(argv: UploadFileOptionsT) {
 
   const form = new FormDataNode();
   form.append('file', file, fileName);
-  form.append('ownerID', argv['owner-id']);
+  form.append('ownerID', argv.ownerID);
 
   const result = await fetchCordRESTApi('files', 'POST', form as FormData);
   prettyPrint(result);
@@ -28,7 +28,7 @@ const uploadFileOptions = {
     string: true,
     demandOption: true,
   },
-  'owner-id': {
+  ownerID: {
     description: 'ID of the user that owns the file',
     nargs: 1,
     string: true,

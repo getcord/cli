@@ -7,7 +7,7 @@ import { prettyPrint } from 'src/prettyPrint';
 import { buildQueryParams } from 'src/utils';
 
 const threadIdOption = {
-  'thread-id': {
+  threadID: {
     description: 'ID of the thread',
     nargs: 1,
     string: true,
@@ -49,7 +49,7 @@ async function listAllMessagesHandler(argv: ListAllMessageOptionsT) {
 
 async function getMessageHandler(argv: ThreadIDOptionT & IdPositionalT) {
   const message = await fetchCordRESTApi(
-    `threads/${argv['thread-id']}/messages/${argv.id}`,
+    `threads/${argv.threadID}/messages/${argv.id}`,
   );
   prettyPrint(message);
 }
@@ -61,34 +61,30 @@ async function createMessageHandler(
     id: argv.id,
     url: argv.url,
     type: argv.type,
-    authorID: argv['author-id'],
-    extraClassnames: argv['extra-classnames'],
-    iconURL: argv['icon-url'],
-    translationKey: argv['translation-key'],
+    authorID: argv.authorID,
+    extraClassnames: argv.extraClassnames,
+    iconURL: argv.iconUrl,
+    translationKey: argv.translationKey,
     content: argv.content ? JSON.parse(argv.content) : undefined,
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
-    addReactions: argv['add-reactions']
-      ? JSON.parse(argv['add-reactions'])
+    addReactions: argv.addReactions ? JSON.parse(argv.addReactions) : undefined,
+    addAttachments: argv.addAttachments
+      ? JSON.parse(argv.addAttachments)
       : undefined,
-    addAttachments: argv['add-attachments']
-      ? JSON.parse(argv['add-attachments'])
+    createThread: argv.createThread ? JSON.parse(argv.createThread) : undefined,
+    createdTimestamp: argv.createdTimestamp
+      ? new Date(argv.createdTimestamp)
       : undefined,
-    createThread: argv['create-thread']
-      ? JSON.parse(argv['create-thread'])
+    deletedTimestamp: argv.deletedTimestamp
+      ? new Date(argv.deletedTimestamp)
       : undefined,
-    createdTimestamp: argv['created-timestamp']
-      ? new Date(argv['created-timestamp'])
-      : undefined,
-    deletedTimestamp: argv['deleted-timestamp']
-      ? new Date(argv['deleted-timestamp'])
-      : undefined,
-    updatedTimestamp: argv['updated-timestamp']
-      ? new Date(argv['updated-timestamp'])
+    updatedTimestamp: argv.updatedTimestamp
+      ? new Date(argv.updatedTimestamp)
       : undefined,
   };
 
   const result = await fetchCordRESTApi(
-    `threads/${argv['thread-id']}/messages`,
+    `threads/${argv.threadID}/messages`,
     'POST',
     JSON.stringify(body),
   );
@@ -100,31 +96,29 @@ async function updateMessageHandler(argv: UpdateMessageOptionsT) {
   const body: ServerUpdateMessage = {
     url: argv.url,
     type: argv.type,
-    id: argv['new-id'],
-    authorID: argv['author-id'],
-    extraClassnames: argv['extra-classnames'],
-    iconURL: argv['icon-url'],
-    translationKey: argv['translation-key'],
+    id: argv.newID,
+    authorID: argv.authorID,
+    extraClassnames: argv.extraClassnames,
+    iconURL: argv.iconUrl,
+    translationKey: argv.translationKey,
     content: argv.content ? JSON.parse(argv.content) : undefined,
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
-    addReactions: argv['add-reactions']
-      ? JSON.parse(argv['add-reactions'])
+    addReactions: argv.addReactions ? JSON.parse(argv.addReactions) : undefined,
+    addAttachments: argv.addAttachments
+      ? JSON.parse(argv.addAttachments)
       : undefined,
-    addAttachments: argv['add-attachments']
-      ? JSON.parse(argv['add-attachments'])
+    createdTimestamp: argv.createdTimestamp
+      ? new Date(argv.createdTimestamp)
       : undefined,
-    createdTimestamp: argv['created-timestamp']
-      ? new Date(argv['created-timestamp'])
+    deletedTimestamp: argv.deletedTimestamp
+      ? new Date(argv.deletedTimestamp)
       : undefined,
-    deletedTimestamp: argv['deleted-timestamp']
-      ? new Date(argv['deleted-timestamp'])
-      : undefined,
-    updatedTimestamp: argv['updated-timestamp']
-      ? new Date(argv['updated-timestamp'])
+    updatedTimestamp: argv.updatedTimestamp
+      ? new Date(argv.updatedTimestamp)
       : undefined,
   };
   const result = await fetchCordRESTApi(
-    `threads/${argv['thread-id']}/messages/${argv.id}`,
+    `threads/${argv.threadID}/messages/${argv.id}`,
     'PUT',
     JSON.stringify(body),
   );
@@ -133,7 +127,7 @@ async function updateMessageHandler(argv: UpdateMessageOptionsT) {
 
 async function deleteMessageHandler(argv: IdPositionalT & ThreadIDOptionT) {
   const result = await fetchCordRESTApi(
-    `threads/${argv['thread-id']}/messages/${argv.id}`,
+    `threads/${argv.threadID}/messages/${argv.id}`,
     'DELETE',
   );
   prettyPrint(result);
@@ -162,17 +156,17 @@ type ListAllMessageOptionsT = InferredOptionTypes<
 >;
 
 const createOrUpdateBaseMessageOptions = {
-  'add-reactions': {
+  addReactions: {
     description: 'Reactions to add to this message as a json string',
     nargs: 1,
     string: true,
   },
-  'add-attachments': {
+  addAttachments: {
     description: 'Attachments to add to this message as a json string',
     nargs: 1,
     string: true,
   },
-  'author-id': {
+  authorID: {
     description: 'ID of the user who sent the message',
     nargs: 1,
     string: true,
@@ -182,17 +176,17 @@ const createOrUpdateBaseMessageOptions = {
     nargs: 1,
     string: true,
   },
-  'icon-url': {
+  iconUrl: {
     description: 'Url of the icon to show next to an action message',
     nargs: 1,
     string: true,
   },
-  'translation-key': {
+  translationKey: {
     description: 'Translation key to use for this message',
     nargs: 1,
     string: true,
   },
-  'created-timestamp': {
+  createdTimestamp: {
     description: 'Timestamp the message was created',
     nargs: 1,
     string: true,
@@ -207,12 +201,12 @@ const createOrUpdateBaseMessageOptions = {
     nargs: 1,
     string: true,
   },
-  'deleted-timestamp': {
+  deletedTimestamp: {
     description: 'Timestamp when the message was deleted',
     nargs: 1,
     string: true,
   },
-  'updated-timestamp': {
+  updatedTimestamp: {
     description: 'Timestamp when the message was updated',
     nargs: 1,
     string: true,
@@ -222,7 +216,7 @@ const createOrUpdateBaseMessageOptions = {
     nargs: 1,
     choices: ['action_message', 'user_message'],
   },
-  'extra-classnames': {
+  extraClassnames: {
     description: 'A space separated list of classnames to add to the thread',
     nargs: 1,
     string: true,
@@ -231,14 +225,14 @@ const createOrUpdateBaseMessageOptions = {
 
 const createMessageOptions = {
   ...createOrUpdateBaseMessageOptions,
-  'create-thread': {
+  createThread: {
     description:
       "Parameters for creating a thread, if the thread doesn't exist yet, as a json string",
     nargs: 1,
     string: true,
   },
-  'author-id': {
-    ...createOrUpdateBaseMessageOptions['author-id'],
+  authorID: {
+    ...createOrUpdateBaseMessageOptions.authorID,
     demandOption: true,
   },
   content: {
@@ -249,7 +243,7 @@ const createMessageOptions = {
 
 const updateMessageOptions = {
   ...createOrUpdateBaseMessageOptions,
-  'new-id': {
+  newID: {
     description: 'Remove existing message id and replace with this new one',
     nargs: 1,
     string: true,

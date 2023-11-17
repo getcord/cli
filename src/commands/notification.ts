@@ -14,7 +14,7 @@ async function listAllNotificationsHandler(argv: ListAllNotificationsOptionsT) {
   ];
   const queryParams = buildQueryParams(options);
   const notifications = await fetchCordRESTApi(
-    `users/${argv['user-id']}/notifications${queryParams}`,
+    `users/${argv.userID}/notifications${queryParams}`,
   );
   prettyPrint(notifications);
 }
@@ -35,10 +35,10 @@ async function createNotificationHandler(argv: CreateNotificationOptionsT) {
     type: argv.type,
     url: argv.url,
     template: argv.template,
-    recipientID: argv['recipient-id'],
-    actorID: argv['actor-id'],
-    iconUrl: argv['icon-url'],
-    extraClassnames: argv['extra-classnames'],
+    recipientID: argv.recipientID,
+    actorID: argv.actorID,
+    iconUrl: argv.iconUrl,
+    extraClassnames: argv.extraClassnames,
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
   };
   const result = await fetchCordRESTApi(
@@ -50,13 +50,13 @@ async function createNotificationHandler(argv: CreateNotificationOptionsT) {
 }
 
 const createNotificationOptions = {
-  'recipient-id': {
+  recipientID: {
     description: 'ID of the user receiving the notification',
     nargs: 1,
     string: true,
     demandOption: true,
   },
-  'actor-id': {
+  actorID: {
     description: 'ID of the user who is sending the notification',
     nargs: 1,
     string: true,
@@ -73,7 +73,7 @@ const createNotificationOptions = {
     string: true,
     demandOption: true,
   },
-  'icon-url': {
+  iconUrl: {
     description: 'Url of an icon image',
     nargs: 1,
     string: true,
@@ -83,7 +83,7 @@ const createNotificationOptions = {
     nargs: 1,
     string: true,
   },
-  'extra-classnames': {
+  extraClassnames: {
     description:
       'A space separated list of classnames to add to the notification',
     nargs: 1,
@@ -117,7 +117,7 @@ export const notificationCommand = {
         'List all notifications a user has received: GET https://api.cord.com/v1/users/<USER_ID>/notifications',
         (yargs: Argv) =>
           yargs
-            .positional('user-id', userIdPositional['user-id'])
+            .positional('userID', userIdPositional.userID)
             .options(listAllNotificationsParameters),
         listAllNotificationsHandler,
       )

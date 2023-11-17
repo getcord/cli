@@ -40,9 +40,9 @@ async function createOrUpdateUserHandler(argv: CreateOrUpdateUserOptionsT) {
   const update: ServerUpdateUser = {
     email: argv.email,
     name: argv.name,
-    shortName: argv['short-name'],
+    shortName: argv.shortName,
     status: argv.status,
-    profilePictureURL: argv['profile-picture'],
+    profilePictureURL: argv.profilePicture,
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
   };
   const result = await fetchCordRESTApi(
@@ -68,12 +68,12 @@ async function deleteUserHandler(argv: DeleteUserOptionsT) {
 
 async function updateUserPresenceHandler(argv: UpdateUserPresenceOptionsT) {
   const body: ServerUpdatePresence = {
-    groupID: argv['group-id'],
+    groupID: argv.groupID,
     location: JSON.parse(argv.location),
     durable: argv.durable,
     absent: argv.absent,
-    exclusiveWithin: argv['exclusive-within']
-      ? JSON.parse(argv['exclusive-within'])
+    exclusiveWithin: argv.exclusiveWithin
+      ? JSON.parse(argv.exclusiveWithin)
       : undefined,
   };
   const result = await fetchCordRESTApi(
@@ -103,7 +103,7 @@ async function updatePreferencesHandler(argv: UpdatePreferencesOptionsT) {
 }
 
 const updateUserPresenceOptions = {
-  'group-id': {
+  groupID: {
     alias: 'organization-id',
     description: 'The group the user belongs to',
     nargs: 1,
@@ -128,7 +128,7 @@ const updateUserPresenceOptions = {
     nargs: 1,
     boolean: true,
   },
-  'exclusive-within': {
+  exclusiveWithin: {
     description:
       'Clear presence at any other sub-location https://docs.cord.com/rest-apis/presence#exclusiveWithin',
     nargs: 1,
@@ -172,7 +172,7 @@ const createOrUpdateUserOptions = {
     nargs: 1,
     string: true,
   },
-  'short-name': {
+  shortName: {
     description: 'Short (display) name of the user',
     nargs: 1,
     string: true,
@@ -187,7 +187,7 @@ const createOrUpdateUserOptions = {
     nargs: 1,
     choices: ['active', 'deleted'],
   },
-  'profile-picture': {
+  profilePicture: {
     description: "URL of the user's profile picture",
     nargs: 1,
     string: true,

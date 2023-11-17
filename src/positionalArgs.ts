@@ -10,7 +10,7 @@ export const idPositional = {
 export type IdPositionalT = InferredOptionTypes<typeof idPositional>;
 
 export const userIdPositional = {
-  'user-id': {
+  userID: {
     describe: 'ID of the user',
     string: true,
     demandOption: true,

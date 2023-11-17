@@ -26,11 +26,11 @@ async function getApplicationHandler(argv: IdPositionalT) {
 async function createApplicationHandler(argv: CreateApplicationOptionsT) {
   const body: ServerCreateApplication = {
     name: argv.name,
-    iconURL: argv['icon-url'],
-    eventWebhookURL: argv['event-webhook-url'],
-    redirectURI: argv['redirect-uri'],
-    emailSettings: argv['email-settings']
-      ? JSON.parse(argv['email-settings'])
+    iconURL: argv.iconUrl,
+    eventWebhookURL: argv.eventWebhookUrl,
+    redirectURI: argv.redirectUri,
+    emailSettings: argv.emailSettings
+      ? JSON.parse(argv.emailSettings)
       : undefined,
   };
 
@@ -47,11 +47,11 @@ async function updateApplicationHandler(
 ) {
   const body: ServerUpdateApplication = {
     name: argv.name,
-    iconURL: argv['icon-url'],
-    eventWebhookURL: argv['event-webhook-url'],
-    redirectURI: argv['redirect-uri'],
-    emailSettings: argv['email-settings']
-      ? JSON.parse(argv['email-settings'])
+    iconURL: argv.iconUrl,
+    eventWebhookURL: argv.eventWebhookUrl,
+    redirectURI: argv.redirectUri,
+    emailSettings: argv.emailSettings
+      ? JSON.parse(argv.emailSettings)
       : undefined,
   };
   const result = await fetchCordManagementApi(
@@ -97,22 +97,22 @@ async function deleteApplicationHandler(
 }
 
 const createOrUpdateBaseOptions = {
-  'icon-url': {
+  iconUrl: {
     description: 'Url for application icon. Defaults to Cord logo',
     nargs: 1,
     string: true,
   },
-  'email-settings': {
+  emailSettings: {
     description: 'Json string of your email settings object',
     nargs: 1,
     string: true,
   },
-  'event-webhook-url': {
+  eventWebhookUrl: {
     description: 'Url the events webhook is sent to',
     nargs: 1,
     string: true,
   },
-  'redirect-uri': {
+  redirectUri: {
     description: 'Custom url link contained in email and slack notifications',
     nargs: 1,
     string: true,

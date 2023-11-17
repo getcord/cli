@@ -48,12 +48,12 @@ async function createThreadHandler(
     id: argv.id,
     name: argv.name,
     url: argv.url,
-    groupID: argv['group-id'],
+    groupID: argv.groupID,
     location: JSON.parse(argv.location),
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
-    extraClassnames: argv['extra-classnames'],
-    addSubscribers: argv['add-subscribers']
-      ? JSON.parse(argv['add-subscribers'])
+    extraClassnames: argv.extraClassnames,
+    addSubscribers: argv.addSubscribers
+      ? JSON.parse(argv.addSubscribers)
       : undefined,
   };
 
@@ -96,17 +96,17 @@ async function updateThreadHandler(argv: UpdateThreadOptionsT) {
     name: argv.name,
     resolved: argv.resolved,
     url: argv.url,
-    id: argv['new-id'],
-    groupID: argv['group-id'],
-    extraClassnames: argv['extra-classnames'],
-    userID: argv['user-id'],
+    id: argv.newID,
+    groupID: argv.groupID,
+    extraClassnames: argv.extraClassnames,
+    userID: argv.userID,
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
     location: argv.location ? JSON.parse(argv.location) : undefined,
     typing: argv.typing ? JSON.parse(argv.typing) : undefined,
     resolvedTimestamp:
-      typeof argv['resolved-timestamp'] === 'string'
-        ? new Date(argv['resolved-timestamp'])
-        : argv['resolved-timestamp'],
+      typeof argv.resolvedTimestamp === 'string'
+        ? new Date(argv.resolvedTimestamp)
+        : argv.resolvedTimestamp,
   };
 
   const result = await fetchCordRESTApi(
@@ -167,12 +167,12 @@ const createOrUpdateBaseThreadOptions = {
     nargs: 1,
     string: true,
   },
-  'group-id': {
+  groupID: {
     description: 'The group id this thread is in',
     nargs: 1,
     string: true,
   },
-  'extra-classnames': {
+  extraClassnames: {
     description: 'A space separated list of classnames to add to the thread',
     nargs: 1,
     string: true,
@@ -194,8 +194,8 @@ const createThreadOptions = {
     ...createOrUpdateBaseThreadOptions.url,
     demandOption: true,
   },
-  'group-id': {
-    ...createOrUpdateBaseThreadOptions['group-id'],
+  groupID: {
+    ...createOrUpdateBaseThreadOptions.groupID,
     demandOption: true,
   },
   location: {
@@ -203,7 +203,7 @@ const createThreadOptions = {
     demandOption: true,
   },
   // subscribers is only in the createThreadOptions
-  'add-subscribers': {
+  addSubscribers: {
     description: 'A list of users to subscribe to this thread as a json string',
     nargs: 1,
     string: true,
@@ -213,22 +213,22 @@ const createThreadOptions = {
 type CreateThreadOptionsT = InferredOptionTypes<typeof createThreadOptions>;
 const updateThreadOptions = {
   ...createOrUpdateBaseThreadOptions,
-  'new-id': {
+  newID: {
     description: 'Remove existing thread id and replace with this new one',
     nargs: 1,
     string: true,
   },
-  'group-id': {
-    ...createOrUpdateBaseThreadOptions['group-id'],
+  groupID: {
+    ...createOrUpdateBaseThreadOptions.groupID,
     alias: 'organization-id',
   },
-  'resolved-timestamp': {
+  resolvedTimestamp: {
     description:
       'The timestamp when this thread was resolved, or null if not resolved',
     nargs: 1,
     string: true,
   },
-  'user-id': {
+  userID: {
     description:
       'The id of the user to be listed as the author of an action message (eg. "User un/resolved this thread") on certain changes to a thread',
     nargs: 1,
