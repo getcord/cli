@@ -11,6 +11,7 @@ import { fileCommand } from 'src/commands/file';
 import { initCommand } from 'src/commands/init';
 import { checkVersion } from 'src/checkVersion';
 import packageData from 'package.json';
+import { permissionCommand } from 'src/commands/permission';
 
 async function main(): Promise<void> {
   await checkVersion();
@@ -27,6 +28,7 @@ async function main(): Promise<void> {
     .command(notificationCommand)
     .command(messageCommand)
     .command(fileCommand)
+    .command(permissionCommand)
     .version(packageData.version)
     .wrap(yargs().terminalWidth())
     .help().argv;
