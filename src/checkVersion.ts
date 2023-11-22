@@ -1,7 +1,11 @@
 import chalk from 'chalk';
 import Box from 'cli-box';
 import fetch from 'node-fetch';
-import { getEnvVariables, updateEnvVariables } from 'src/utils';
+import {
+  getEnvVariables,
+  isLaterCliVersion,
+  updateEnvVariables,
+} from 'src/utils';
 import packageData from 'package.json';
 
 export async function checkVersion() {
@@ -28,7 +32,7 @@ export async function checkVersion() {
     VERSION_LAST_CHECKED: Date.now().toString(),
   });
 
-  if (publishedVersion !== packageData.version) {
+  if (isLaterCliVersion(packageData.version, publishedVersion)) {
     const box = Box(
       { h: 3, w: 50, stringify: false },
       `👋 ${chalk.bold('There is a newer version available!')}

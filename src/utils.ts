@@ -51,3 +51,23 @@ export async function updateEnvVariables(newVariables: {
     .join('\n');
   fs.writeFileSync(cordConfigPath, envString);
 }
+
+/**
+ * Checks if `a` is a later version than `b`.
+ * This will only work for versions in the format of NUMBER.NUMBER.NUMBER
+ * We are okay with that here as we are always checking for this format.
+ */
+export function isLaterCliVersion(a: string, b: string) {
+  const first = a.split('.');
+  const second = b.split('.');
+
+  for (let i = 0; i < first.length; i++) {
+    if (+first[i] > +second[i]) {
+      return true;
+    }
+    if (+first[i] < +second[i]) {
+      return false;
+    }
+  }
+  return false;
+}
