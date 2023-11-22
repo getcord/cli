@@ -5,6 +5,7 @@ import { idPositional } from 'src/positionalArgs';
 import type { IdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
 import { buildQueryParams } from 'src/utils';
+import { markdownToNode } from 'src/messageFormatter/mdToNode';
 
 const threadIdOption = {
   threadID: {
@@ -57,6 +58,9 @@ async function getMessageHandler(argv: ThreadIDOptionT & IdPositionalT) {
 async function createMessageHandler(
   argv: CreateMessageOptionsT & OptionalIdPositionalT,
 ) {
+  const markdownContent = argv.markdownContent
+    ? markdownToNode(argv.markdownContent)
+    : undefined;
   const body: ServerCreateMessage = {
     id: argv.id,
     url: argv.url,
@@ -65,7 +69,7 @@ async function createMessageHandler(
     extraClassnames: argv.extraClassnames,
     iconURL: argv.iconUrl,
     translationKey: argv.translationKey,
-    content: argv.content ? JSON.parse(argv.content) : undefined,
+    content: argv.content ? JSON.parse(argv.content) : markdownContent,
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
     addReactions: argv.addReactions ? JSON.parse(argv.addReactions) : undefined,
     addAttachments: argv.addAttachments
@@ -93,6 +97,9 @@ async function createMessageHandler(
 }
 
 async function updateMessageHandler(argv: UpdateMessageOptionsT) {
+  const markdownContent = argv.markdownContent
+    ? markdownToNode(argv.markdownContent)
+    : undefined;
   const body: ServerUpdateMessage = {
     url: argv.url,
     type: argv.type,
@@ -101,7 +108,7 @@ async function updateMessageHandler(argv: UpdateMessageOptionsT) {
     extraClassnames: argv.extraClassnames,
     iconURL: argv.iconUrl,
     translationKey: argv.translationKey,
-    content: argv.content ? JSON.parse(argv.content) : undefined,
+    content: argv.content ? JSON.parse(argv.content) : markdownContent,
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
     addReactions: argv.addReactions ? JSON.parse(argv.addReactions) : undefined,
     addAttachments: argv.addAttachments
@@ -176,6 +183,12 @@ const createOrUpdateBaseMessageOptions = {
     nargs: 1,
     string: true,
   },
+  markdownContent: {
+    description:
+      'Content of the message as a markdown string. This currently cannot format mentions.',
+    nargs: 1,
+    string: true,
+  },
   iconUrl: {
     description: 'Url of the icon to show next to an action message',
     nargs: 1,
@@ -235,10 +248,6 @@ const createMessageOptions = {
     ...createOrUpdateBaseMessageOptions.authorID,
     demandOption: true,
   },
-  content: {
-    ...createOrUpdateBaseMessageOptions.content,
-    demandOption: true,
-  },
 } as const;
 
 const updateMessageOptions = {
@@ -283,7 +292,15 @@ export const messageCommand = {
           yargs
             .options({ ...createMessageOptions, ...threadIdOption })
             .options(threadIdOption)
-            .positional('id', optionalIdPositional.id),
+            .positional('id', optionalIdPositional.id)
+            .check((argv) => {
+              if (argv.content || argv.markdownContent) {
+                return true;
+              }
+              throw new Error(
+                'You need to provide either content or markdownContent',
+              );
+            }),
         createMessageHandler,
       )
       .command(
