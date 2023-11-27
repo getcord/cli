@@ -30,7 +30,7 @@ async function getThreadMessagesHandler(argv: GetMessageOptions) {
   const options = [
     {
       field: 'sortDirection',
-      value: argv['sort-direction'],
+      value: argv.sortDirection,
     },
   ];
   const queryParams = buildQueryParams(options);
@@ -140,7 +140,7 @@ type ListAllThreadsOptionsT = InferredOptionTypes<
 >;
 
 const getMessagesParameters = {
-  'sort-direction': {
+  sortDirection: {
     description:
       'returns messages in ascending or descending order of creation timestamp',
     nargs: 1,

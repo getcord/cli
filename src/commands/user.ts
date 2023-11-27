@@ -55,7 +55,7 @@ async function createOrUpdateUserHandler(argv: CreateOrUpdateUserOptionsT) {
 
 async function deleteUserHandler(argv: DeleteUserOptionsT) {
   const body = {
-    permanently_delete: argv['permanently-delete'],
+    permanently_delete: argv.permanentlyDelete,
   };
 
   const result = await fetchCordRESTApi(
@@ -197,7 +197,7 @@ type CreateOrUpdateUserOptionsT = IdPositionalT &
   InferredOptionTypes<typeof createOrUpdateUserOptions>;
 
 const deleteUserOptions = {
-  'permanently-delete': {
+  permanentlyDelete: {
     description: 'User will only be deleted if true',
     nargs: 1,
     boolean: true,
