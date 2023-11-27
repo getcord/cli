@@ -169,6 +169,7 @@ const createOrUpdateBaseThreadOptions = {
   },
   groupID: {
     description: 'The group id this thread is in',
+    alias: 'groupId',
     nargs: 1,
     string: true,
   },
@@ -215,6 +216,7 @@ const updateThreadOptions = {
   ...createOrUpdateBaseThreadOptions,
   newID: {
     description: 'Remove existing thread id and replace with this new one',
+    alias: 'newId',
     nargs: 1,
     string: true,
   },
@@ -231,6 +233,7 @@ const updateThreadOptions = {
   userID: {
     description:
       'The id of the user to be listed as the author of an action message (eg. "User un/resolved this thread") on certain changes to a thread',
+    alias: 'userId',
     nargs: 1,
     string: true,
   },

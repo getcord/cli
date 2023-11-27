@@ -14,7 +14,7 @@ async function createPermissionHandler(argv: CreatePermissionOptionsT) {
         : undefined,
     },
     userFilter: {
-      id: argv.userId,
+      id: argv.userID,
       metadata: argv.userMetadata ? JSON.parse(argv.userMetadata) : undefined,
     },
     permission: argv.permission,
@@ -43,7 +43,8 @@ const createPermissionOptions = {
   resourceMetadata: {
     string: true,
   },
-  userId: {
+  userID: {
+    alias: 'userId',
     string: true,
     array: true,
   },

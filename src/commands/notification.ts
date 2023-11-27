@@ -52,12 +52,14 @@ async function createNotificationHandler(argv: CreateNotificationOptionsT) {
 const createNotificationOptions = {
   recipientID: {
     description: 'ID of the user receiving the notification',
+    alias: 'recipientId',
     nargs: 1,
     string: true,
     demandOption: true,
   },
   actorID: {
     description: 'ID of the user who is sending the notification',
+    alias: 'actorId',
     nargs: 1,
     string: true,
   },

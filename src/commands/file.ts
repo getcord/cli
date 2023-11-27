@@ -30,6 +30,7 @@ const uploadFileOptions = {
   },
   ownerID: {
     description: 'ID of the user that owns the file',
+    alias: 'ownerId',
     nargs: 1,
     string: true,
     demandOption: true,

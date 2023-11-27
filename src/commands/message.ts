@@ -10,6 +10,7 @@ import { markdownToNode } from 'src/messageFormatter/mdToNode';
 const threadIdOption = {
   threadID: {
     description: 'ID of the thread',
+    alias: 'threadId',
     nargs: 1,
     string: true,
     demandOption: true,
@@ -175,6 +176,7 @@ const createOrUpdateBaseMessageOptions = {
   },
   authorID: {
     description: 'ID of the user who sent the message',
+    alias: 'authorId',
     nargs: 1,
     string: true,
   },
@@ -254,6 +256,7 @@ const updateMessageOptions = {
   ...createOrUpdateBaseMessageOptions,
   newID: {
     description: 'Remove existing message id and replace with this new one',
+    alias: 'newId',
     nargs: 1,
     string: true,
   },

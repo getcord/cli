@@ -104,8 +104,8 @@ async function updatePreferencesHandler(argv: UpdatePreferencesOptionsT) {
 
 const updateUserPresenceOptions = {
   groupID: {
-    alias: 'organization-id',
     description: 'The group the user belongs to',
+    alias: ['organizationID', 'organizationId', 'groupId'],
     nargs: 1,
     string: true,
     demandOption: true,
