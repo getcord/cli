@@ -10,6 +10,7 @@ import { fetchCordManagementApi } from 'src/fetchCordRESTApi';
 import { idPositional } from 'src/positionalArgs';
 import type { IdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
+import { updateEnvVariables } from 'src/utils';
 
 async function listAllApplicationsHandler() {
   const apps = await fetchCordManagementApi<ApplicationData[]>('applications');
@@ -94,6 +95,27 @@ async function deleteApplicationHandler(
     JSON.stringify({ secret }),
   );
   prettyPrint(result);
+}
+
+async function selectApplicationHandler() {
+  const apps = await fetchCordManagementApi<ApplicationData[]>('applications');
+  const selectApp: QuestionCollection<{ selectedApp: string }> = [
+    {
+      name: 'selectedApp',
+      message: 'Which app would you like to use?',
+      type: 'list',
+      choices: apps.map((app) => ({ name: app.name, value: app.id })),
+    },
+  ];
+  const { selectedApp } = await inquirer.prompt(selectApp);
+  const selectedAppDetails = await fetchCordManagementApi<ApplicationData>(
+    `applications/${selectedApp}`,
+  );
+  await updateEnvVariables({
+    CORD_APP_ID: selectedAppDetails.id,
+    CORD_APP_SECRET: selectedAppDetails.secret,
+  });
+  prettyPrint(`You are now querying within ${selectedAppDetails.name}`);
 }
 
 const createOrUpdateBaseOptions = {
@@ -191,6 +213,12 @@ export const applicationCommand = {
               'delete without app secret. CAUTION! THIS WILL DELETE THE ENTIRE APPLICATION, INCLUDING ALL USERS, THREADS, AND MESSAGES!',
             ),
         deleteApplicationHandler,
+      )
+      .command(
+        'select',
+        'Select an app you would like to use',
+        (yargs) => yargs,
+        selectApplicationHandler,
       );
   },
   handler: (_: unknown) => {},
