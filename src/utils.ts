@@ -2,6 +2,21 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
+const KEYS = [
+  'VERSION_LAST_CHECKED',
+  'CORD_APP_ID',
+  'CORD_APP_SECRET',
+  'CORD_CUSTOMER_ID',
+  'CORD_CUSTOMER_SECRET',
+  'CORD_API_URL',
+] as const;
+type EnvKey = (typeof KEYS)[number];
+type Env = Partial<{ [key in EnvKey]: string }>;
+
+function isEnvKey(input: string): input is EnvKey {
+  return KEYS.includes(input as EnvKey);
+}
+
 export function buildQueryParams(
   args: {
     field: string;
@@ -22,7 +37,7 @@ export const cordConfigPath =
 const asyncFs = fs.promises;
 
 export async function getEnvVariables() {
-  const env: { [key: string]: string } = {};
+  const env: Env = {};
   const data = await asyncFs.readFile(cordConfigPath, 'utf-8');
   if (data) {
     data
@@ -30,15 +45,16 @@ export async function getEnvVariables() {
       .filter((line) => line.trim().length > 0)
       .forEach((entry) => {
         const [key, value] = entry.split('=');
-        env[key.trim()] = value.trim();
+        const trimmedKey = key.trim();
+        if (isEnvKey(trimmedKey)) {
+          env[trimmedKey] = value.trim();
+        }
       });
   }
   return env;
 }
 
-export async function updateEnvVariables(newVariables: {
-  [key: string]: string;
-}) {
+export async function updateEnvVariables(newVariables: Env) {
   const existingVariables = await getEnvVariables().catch(() => {
     /*no-op. probably just doesn't exist yet*/
   });
