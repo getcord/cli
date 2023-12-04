@@ -10,11 +10,27 @@ import { fetchCordManagementApi } from 'src/fetchCordRESTApi';
 import { idPositional } from 'src/positionalArgs';
 import type { IdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
-import { updateEnvVariables } from 'src/utils';
+import { getEnvVariables, updateEnvVariables } from 'src/utils';
 
 async function listAllApplicationsHandler() {
   const apps = await fetchCordManagementApi<ApplicationData[]>('applications');
   prettyPrint(apps);
+}
+
+async function whichApplicationHandler() {
+  const variables = await getEnvVariables().catch(() => {
+    /* no op, catch below instead */
+  });
+  if (variables?.CORD_APP_ID) {
+    const app = await fetchCordManagementApi<ApplicationData>(
+      `applications/${variables.CORD_APP_ID}`,
+    );
+    prettyPrint(app);
+  } else {
+    console.error(
+      `You haven't configured an application yet, please run cord init.`,
+    );
+  }
 }
 
 async function getApplicationHandler(argv: IdPositionalT) {
@@ -219,6 +235,12 @@ export const applicationCommand = {
         'Select an app you would like to use',
         (yargs) => yargs,
         selectApplicationHandler,
+      )
+      .command(
+        'which',
+        'See the app you are using',
+        (yargs) => yargs,
+        whichApplicationHandler,
       );
   },
   handler: (_: unknown) => {},
