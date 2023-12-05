@@ -32,7 +32,7 @@ export async function checkVersion() {
     VERSION_LAST_CHECKED: Date.now().toString(),
   });
 
-  if (isLaterCliVersion(packageData.version, publishedVersion)) {
+  if (isLaterCliVersion(publishedVersion, packageData.version)) {
     const box = Box(
       { h: 3, w: 50, stringify: false },
       `👋 ${chalk.bold('There is a newer version available!')}
