@@ -103,6 +103,12 @@ async function updateThreadHandler(argv: UpdateThreadOptionsT) {
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
     location: argv.location ? JSON.parse(argv.location) : undefined,
     typing: argv.typing ? JSON.parse(argv.typing) : undefined,
+    addSubscribers: argv.addSubscribers
+      ? JSON.parse(argv.addSubscribers)
+      : undefined,
+    removeSubscribers: argv.removeSubscribers
+      ? JSON.parse(argv.removeSubscribers)
+      : undefined,
     resolvedTimestamp:
       typeof argv.resolvedTimestamp === 'string'
         ? new Date(argv.resolvedTimestamp)
@@ -183,6 +189,11 @@ const createOrUpdateBaseThreadOptions = {
     nargs: 1,
     string: true,
   },
+  addSubscribers: {
+    description: 'A list of users to subscribe to this thread as a json string',
+    nargs: 1,
+    string: true,
+  },
 } as const;
 
 const createThreadOptions = {
@@ -202,12 +213,6 @@ const createThreadOptions = {
   location: {
     ...createOrUpdateBaseThreadOptions.location,
     demandOption: true,
-  },
-  // subscribers is only in the createThreadOptions
-  addSubscribers: {
-    description: 'A list of users to subscribe to this thread as a json string',
-    nargs: 1,
-    string: true,
   },
 } as const;
 
@@ -240,6 +245,12 @@ const updateThreadOptions = {
   typing: {
     description:
       "A json array of user ids to mark them as typing in this thread. Pass an empty array to clear all users' typing indicators",
+    nargs: 1,
+    string: true,
+  },
+  removeSubscribers: {
+    description:
+      'A list of users to unsubscribe from this thread as a json string',
     nargs: 1,
     string: true,
   },

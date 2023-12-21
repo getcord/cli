@@ -1,6 +1,6 @@
 {
   "name": "@cord-sdk/cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "CLI tool for Cord",
   "main": "index.js",
   "homepage": "https://docs.cord.com/reference/cord-cli",
@@ -27,7 +27,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@cord-sdk/types": "^1.26",
+    "@cord-sdk/types": "^1.30.0",
     "@cspell/eslint-plugin": "^7.3.2",
     "@types/cli-box": "^6.0.2",
     "@types/inquirer": "^9.0.3",
@@ -49,7 +49,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@cord-sdk/server": "^1.26",
+    "@cord-sdk/server": "^1.30.0",
     "chalk": "^5.3.0",
     "cli-box": "^6.0.10",
     "formdata-node": "^5.0.1",
