@@ -49,12 +49,14 @@ export const fileCommand = {
   description:
     'Operations for managing files. For more info refer to docs: https://docs.cord.com/rest-apis/files',
   builder: (yargs: Argv) => {
-    return yargs.command(
-      'upload',
-      "Upload a file to Cord's file storage: POST https://api.cord.com/v1/files",
-      (yargs: Argv) => yargs.options(uploadFileOptions),
-      uploadFileHandler,
-    );
+    return yargs
+      .demand(1)
+      .command(
+        'upload',
+        "Upload a file to Cord's file storage: POST https://api.cord.com/v1/files",
+        (yargs: Argv) => yargs.options(uploadFileOptions),
+        uploadFileHandler,
+      );
   },
   handler: (_: unknown) => {},
 };
