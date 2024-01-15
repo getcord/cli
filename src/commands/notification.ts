@@ -115,7 +115,7 @@ export const notificationCommand = {
     return yargs
       .demand(1)
       .command(
-        'ls <user-id>',
+          'ls <userID>',
         'List all notifications a user has received: GET https://api.cord.com/v1/users/<USER_ID>/notifications',
         (yargs: Argv) =>
           yargs
