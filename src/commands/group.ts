@@ -25,6 +25,7 @@ async function createOrUpdateOrgHandler(argv: CreateOrUpdateBaseOrgOptionsT) {
     name: argv.name,
     status: argv.status,
     members: argv.members ? JSON.parse(argv.members) : undefined,
+    metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
   };
   const result = await fetchCordRESTApi(
     `groups/${argv.id}`,
@@ -73,6 +74,11 @@ const createOrUpdateBaseOrgOptions = {
   members: {
     description:
       'List of user IDs to be a part of this group as a json string. This will replace the existing set of members',
+    nargs: 1,
+    string: true,
+  },
+  metadata: {
+    description: 'Metadata of the group as a json string',
     nargs: 1,
     string: true,
   },
