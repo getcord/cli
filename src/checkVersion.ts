@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import Box from 'cli-box';
-import fetch from 'node-fetch';
 import {
   getEnvVariables,
   isLaterCliVersion,
