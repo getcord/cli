@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { inspect } from 'util';
 import chalk from 'chalk';
 import yargs from 'yargs';
 import { threadCommand } from 'src/commands/thread';
@@ -32,7 +33,7 @@ async function main(): Promise<void> {
     .command(permissionCommand)
     .fail((msg, err, yargs) => {
       yargs.showHelp();
-      console.error(chalk.red(`\n${msg ?? err.message}`));
+      console.error(chalk.red(`\n${msg ?? inspect(err)}`));
       process.exit(1);
     })
     .version(packageData.version)
