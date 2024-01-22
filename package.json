@@ -56,6 +56,7 @@
     "inquirer": "^9.2.11",
     "markdown-it": "^13.0.2",
     "mime": "^3.0.0",
+    "node-fetch": "^3.3.2",
     "yargs": "^17.7.2"
   },
   "jest": {
