@@ -752,6 +752,72 @@ I'm going to start \`numbering things\`:
       },
     ],
   },
+  {
+    name: 'Block quote with embedded numbered list',
+    mdMessage: `> This is a block quote with list
+    > 1. Number one
+    > 2. Number two`,
+    nodeMessage: [
+      {
+        type: MessageNodeType.QUOTE,
+        children: [
+          {
+            text: 'This is a block quote with list',
+          },
+          {
+            type: MessageNodeType.NUMBER_BULLET,
+            children: [
+              {
+                type: MessageNodeType.PARAGRAPH,
+                children: [
+                  {
+                    text: 'Number one',
+                  },
+                ],
+              },
+            ],
+            bulletNumber: 1,
+          },
+          {
+            type: MessageNodeType.NUMBER_BULLET,
+            children: [
+              {
+                type: MessageNodeType.PARAGRAPH,
+                children: [
+                  {
+                    text: 'Number two',
+                  },
+                ],
+              },
+            ],
+            bulletNumber: 2,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Block quote with multiple lines',
+    mdMessage: `> This is a block quote with lines
+    > Line one
+    > Line two`,
+    nodeMessage: [
+      {
+        type: MessageNodeType.QUOTE,
+        children: [
+          {
+            text: 'This is a block quote with lines',
+          },
+          {
+            text: 'Line one',
+          },
+          {
+            text: 'Line two',
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 describe('Message Parser: markdown -> message content', () => {

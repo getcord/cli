@@ -89,7 +89,11 @@ function markdownBlockTokens(tokens: Token[]): MessageContent {
         }
         if (openBulletListToken) {
           openBulletListToken.children.push(...openTokens);
-        } else if (openQuoteToken) {
+        } else if (
+          openQuoteToken &&
+          !openBulletListToken &&
+          !openNumberedBulletListToken
+        ) {
           openQuoteToken.children.push(...openTokens[0].children);
         } else if (openNumberedBulletListToken) {
           openNumberedBulletListToken.children.push(...openTokens);
@@ -146,13 +150,21 @@ function markdownBlockTokens(tokens: Token[]): MessageContent {
       }
       case 'list_item_close':
         if (listTokenType === 'bullet' && openBulletListToken) {
-          result.push(openBulletListToken);
+          if (!openQuoteToken) {
+            result.push(openBulletListToken);
+          } else {
+            openQuoteToken.children.push(openBulletListToken);
+          }
           openBulletListToken = undefined;
         } else if (
           listTokenType === 'numbered_bullet' &&
           openNumberedBulletListToken
         ) {
-          result.push(openNumberedBulletListToken);
+          if (!openQuoteToken) {
+            result.push(openNumberedBulletListToken);
+          } else {
+            openQuoteToken.children.push(openNumberedBulletListToken);
+          }
           openNumberedBulletListToken = undefined;
         }
         break;
@@ -211,10 +223,10 @@ function markdownInlineTokens(
         break;
       /* cspell:disable-next-line */
       case 'softbreak':
-        openTokens.push({
-          type: MessageNodeType.PARAGRAPH,
-          children: [],
-        });
+        break;
+      /* cspell:disable-next-line */
+      case 'hardbreak':
+        // nothing to do, but just let the other text nodes be pushed...
         break;
       case 'code_inline':
         lastOpenToken.children.push({
