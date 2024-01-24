@@ -9,7 +9,6 @@ import type {
   MessageNumberBulletNode,
   MessageQuoteNode,
   MessageTextNode,
-  MessageLinkDeprecatedNode,
 } from '@cord-sdk/types';
 import { MessageNodeType } from '@cord-sdk/types';
 import { slackMarkdownRulers } from 'src/messageFormatter/slackMarkdownRulers';
@@ -38,10 +37,7 @@ export function markdownToNode(message: string): MessageContent {
 // Text node can't live on it's own so it wont be a top level node, and this
 // saves a lot of type checking for children just to make typescript happy.
 // We also don't take into account `MessageLinkDeprecatedNode`s anymore.
-type AnyButTextNode = Exclude<
-  MessageNode,
-  MessageTextNode | MessageLinkDeprecatedNode
->;
+type AnyButTextNode = Exclude<MessageNode, MessageTextNode>;
 
 // Parse `block` tokens into our message content. These are tokens that will
 // determine the node of the entire line. Ie. paragraph, list, quote or code

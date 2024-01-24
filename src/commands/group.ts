@@ -2,6 +2,7 @@ import type { Argv, InferredOptionTypes } from 'yargs';
 import type {
   ServerGetGroup,
   ServerListGroup,
+  ServerListGroupMembers,
   ServerUpdateGroup,
   ServerUpdateGroupMembers,
 } from '@cord-sdk/types';
@@ -9,6 +10,7 @@ import { fetchCordRESTApi } from 'src/fetchCordRESTApi';
 import { idPositional } from 'src/positionalArgs';
 import type { IdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
+import { buildQueryParams } from 'src/utils';
 
 async function listAllOrgsHandler() {
   const orgs = await fetchCordRESTApi<ServerListGroup>(`groups`);
@@ -38,6 +40,24 @@ async function createOrUpdateOrgHandler(argv: CreateOrUpdateBaseOrgOptionsT) {
 async function deleteOrgHandler(argv: IdPositionalT) {
   const result = await fetchCordRESTApi(`groups/${argv.id}`, 'DELETE');
   prettyPrint(result);
+}
+
+async function listAllGroupMembersHandler(argv: ListAllGroupMembersOptionsT) {
+  const options = [
+    {
+      field: 'token',
+      value: argv.token,
+    },
+    {
+      field: 'limit',
+      value: argv.limit,
+    },
+  ];
+  const queryParams = buildQueryParams(options);
+  const groupMembers = await fetchCordRESTApi<ServerListGroupMembers>(
+    `groups/${argv.id}/members${queryParams}`,
+  );
+  prettyPrint(groupMembers);
 }
 
 async function addMemberOrgHandler(argv: AddRemoveMemberOptionsT) {
@@ -105,6 +125,22 @@ const addRemoveMemberOptions = {
 type AddRemoveMemberOptionsT = IdPositionalT &
   InferredOptionTypes<typeof addRemoveMemberOptions>;
 
+const listAllGroupMembersParameters = {
+  limit: {
+    description: 'Max number of group members to return',
+    nargs: 1,
+    number: true,
+  },
+  token: {
+    description: 'Pagination token',
+    nargs: 1,
+    string: true,
+  },
+} as const;
+
+type ListAllGroupMembersOptionsT = IdPositionalT &
+  InferredOptionTypes<typeof listAllGroupMembersParameters>;
+
 export const groupCommand = {
   command: ['group', 'organization', 'org'],
   describe:
@@ -145,6 +181,15 @@ export const groupCommand = {
         'Delete a group: DELETE https://api.cord.com/v1/groups/<ID>',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         deleteOrgHandler,
+      )
+      .command(
+        'get-members <id>',
+        'List all members in a group: GET https://api.cord.com/v1/groups/<ID>/members',
+        (yargs: Argv) =>
+          yargs
+            .positional('id', idPositional.id)
+            .options(listAllGroupMembersParameters),
+        listAllGroupMembersHandler,
       )
       .command(
         'add-member <id>',
