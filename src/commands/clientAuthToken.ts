@@ -8,13 +8,13 @@ async function clientAuthTokenHandler(argv: ClientAuthTokenOptionsT) {
   const env = await getEnvVariables().catch(() => {
     /*no-op. probably just doesn't exist yet*/
   });
-  if (!env || !env.CORD_APP_ID || !env.CORD_APP_SECRET) {
+  if (!env || !env.CORD_PROJECT_ID || !env.CORD_PROJECT_SECRET) {
     throw new Error('Please initialize cord first. Run cord init.');
   }
   console.log(
     jwt.sign(
-      { user_id: argv.userID, app_id: env.CORD_APP_ID },
-      env.CORD_APP_SECRET,
+      { user_id: argv.userID, app_id: env.CORD_PROJECT_ID },
+      env.CORD_PROJECT_SECRET,
       {
         algorithm: 'HS512',
         expiresIn: argv.expires,

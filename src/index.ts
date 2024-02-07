@@ -6,7 +6,7 @@ import yargs from 'yargs';
 import { threadCommand } from 'src/commands/thread';
 import { userCommand } from 'src/commands/user';
 import { groupCommand } from 'src/commands/group';
-import { applicationCommand } from 'src/commands/application';
+import { projectCommand } from 'src/commands/application';
 import { notificationCommand } from 'src/commands/notification';
 import { messageCommand } from 'src/commands/message';
 import { fileCommand } from 'src/commands/file';
@@ -27,7 +27,7 @@ async function main(): Promise<void> {
     .command(groupCommand)
     .command(threadCommand)
     .command(userCommand)
-    .command(applicationCommand)
+    .command(projectCommand)
     .command(notificationCommand)
     .command(messageCommand)
     .command(fileCommand)

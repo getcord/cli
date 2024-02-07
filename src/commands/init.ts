@@ -12,16 +12,16 @@ async function initializeCord() {
     'All of the following can be found at https://console.cord.com/applications',
   );
   const questions: QuestionCollection<{
-    CORD_APP_ID: string;
-    CORD_APP_SECRET: string;
+    CORD_PROJECT_ID: string;
+    CORD_PROJECT_SECRET: string;
     requiresAppCommands: boolean;
     CORD_CUSTOMER_ID?: string;
     CORD_CUSTOMER_SECRET?: string;
   }> = [
     {
-      name: 'CORD_APP_ID',
-      default: defaultAnswers?.CORD_APP_ID,
-      message: 'The ID of the application you wish to query within:',
+      name: 'CORD_PROJECT_ID',
+      default: defaultAnswers?.CORD_PROJECT_ID,
+      message: 'The ID of the project you wish to query within:',
       type: 'input',
       validate: (answer: string) => {
         if (answer.length < 1) {
@@ -31,9 +31,9 @@ async function initializeCord() {
       },
     },
     {
-      name: 'CORD_APP_SECRET',
-      default: defaultAnswers?.CORD_APP_SECRET,
-      message: 'The secret of the application you wish to query within:',
+      name: 'CORD_PROJECT_SECRET',
+      default: defaultAnswers?.CORD_PROJECT_SECRET,
+      message: 'The secret of the project you wish to query within:',
       type: 'input',
       validate: (answer: string) => {
         if (answer.length < 1) {
@@ -45,7 +45,7 @@ async function initializeCord() {
     {
       name: 'requiresAppCommands',
       message:
-        'Will you be running any application management commands? (You will need extra credentials):',
+        'Will you be running any project management commands? (You will need extra credentials):',
       type: 'confirm',
       default: false,
     },
@@ -67,8 +67,8 @@ async function initializeCord() {
   ];
 
   const {
-    CORD_APP_ID,
-    CORD_APP_SECRET,
+    CORD_PROJECT_ID,
+    CORD_PROJECT_SECRET,
     CORD_CUSTOMER_ID,
     CORD_CUSTOMER_SECRET,
   } = await inquirer.prompt(questions);
@@ -78,8 +78,8 @@ async function initializeCord() {
     CORD_CUSTOMER_SECRET && CORD_CUSTOMER_SECRET.trim().length > 0;
 
   const variablesToAdd = {
-    CORD_APP_ID,
-    CORD_APP_SECRET,
+    CORD_PROJECT_ID,
+    CORD_PROJECT_SECRET,
     ...(includeCustomerID ? { CORD_CUSTOMER_ID } : {}),
     ...(includeCustomerSecret ? { CORD_CUSTOMER_SECRET } : {}),
   };
@@ -92,7 +92,7 @@ async function initializeCord() {
 
   if (includeCustomerID && !includeCustomerSecret) {
     console.log(
-      'You will still need to configure your customer secret to execute application commands.',
+      'You will still need to configure your customer secret to execute project commands.',
     );
   }
 }

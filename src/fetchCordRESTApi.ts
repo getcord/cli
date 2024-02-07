@@ -15,15 +15,15 @@ export async function fetchCordRESTApi<T>(
   const env = await getEnvVariables().catch(() => {
     /*no-op. probably just doesn't exist yet*/
   });
-  if (!env || !env.CORD_APP_ID || !env.CORD_APP_SECRET) {
+  if (!env || !env.CORD_PROJECT_ID || !env.CORD_PROJECT_SECRET) {
     throw new Error('Please initialize cord first. Run cord init.');
   }
 
   const api_url = env.CORD_API_URL ?? DEFAULT_CORD_API_URL;
 
   const serverAuthToken = getServerAuthToken(
-    env.CORD_APP_ID,
-    env.CORD_APP_SECRET,
+    env.CORD_PROJECT_ID,
+    env.CORD_PROJECT_SECRET,
   );
   const headers = {
     Authorization: `Bearer ${serverAuthToken}`,

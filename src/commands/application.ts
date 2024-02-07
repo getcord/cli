@@ -13,7 +13,7 @@ import { prettyPrint } from 'src/prettyPrint';
 import { getEnvVariables, updateEnvVariables } from 'src/utils';
 
 async function listAllApplicationsHandler() {
-  const apps = await fetchCordManagementApi<ApplicationData[]>('applications');
+  const apps = await fetchCordManagementApi<ApplicationData[]>('projects');
   prettyPrint(apps);
 }
 
@@ -21,21 +21,21 @@ async function whichApplicationHandler() {
   const variables = await getEnvVariables().catch(() => {
     /* no op, catch below instead */
   });
-  if (variables?.CORD_APP_ID) {
+  if (variables?.CORD_PROJECT_ID) {
     const app = await fetchCordManagementApi<ApplicationData>(
-      `applications/${variables.CORD_APP_ID}`,
+      `projects/${variables.CORD_PROJECT_ID}`,
     );
     prettyPrint(app);
   } else {
     console.error(
-      `You haven't configured an application yet, please run cord init.`,
+      `You haven't configured a project yet, please run cord init.`,
     );
   }
 }
 
 async function getApplicationHandler(argv: IdPositionalT) {
   const app = await fetchCordManagementApi<ApplicationData>(
-    `applications/${argv.id}`,
+    `projects/${argv.id}`,
   );
   prettyPrint(app);
 }
@@ -52,7 +52,7 @@ async function createApplicationHandler(argv: CreateApplicationOptionsT) {
   };
 
   const result = await fetchCordManagementApi(
-    'applications',
+    'projects',
     'POST',
     JSON.stringify(body),
   );
@@ -72,7 +72,7 @@ async function updateApplicationHandler(
       : undefined,
   };
   const result = await fetchCordManagementApi(
-    `applications/${argv.id}`,
+    `projects/${argv.id}`,
     'PUT',
     JSON.stringify(body),
   );
@@ -83,11 +83,11 @@ const confirmWithSecret: QuestionCollection<{ secret: string }> = [
   {
     name: 'secret',
     message:
-      'THIS WILL DELETE THE ENTIRE APPLICATION, INCLUDING ALL USERS, THREADS, AND MESSAGES. Enter the app secret to confirm you really want to delete all of this data:',
+      'THIS WILL DELETE THE ENTIRE PROJECT, INCLUDING ALL USERS, THREADS, AND MESSAGES. Enter the project secret to confirm you really want to delete all of this data:',
     type: 'input',
     validate: (answer: string) => {
       if (answer.length < 1) {
-        return 'You must provide the app secret to delete the application';
+        return 'You must provide the project secret to delete the project';
       }
       return true;
     },
@@ -100,13 +100,13 @@ async function deleteApplicationHandler(
   let secret: string;
   if (argv['--force'] || argv['-f']) {
     ({ secret } = await fetchCordManagementApi<ApplicationData>(
-      `applications/${argv.id}`,
+      `projects/${argv.id}`,
     ));
   } else {
     ({ secret } = await inquirer.prompt(confirmWithSecret));
   }
   const result = await fetchCordManagementApi(
-    `applications/${argv.id}`,
+    `projects/${argv.id}`,
     'DELETE',
     JSON.stringify({ secret }),
   );
@@ -114,29 +114,29 @@ async function deleteApplicationHandler(
 }
 
 async function selectApplicationHandler() {
-  const apps = await fetchCordManagementApi<ApplicationData[]>('applications');
-  const selectApp: QuestionCollection<{ selectedApp: string }> = [
+  const apps = await fetchCordManagementApi<ApplicationData[]>('projects');
+  const selectProject: QuestionCollection<{ selectedProject: string }> = [
     {
-      name: 'selectedApp',
-      message: 'Which app would you like to use?',
+      name: 'selectedProject',
+      message: 'Which project would you like to use?',
       type: 'list',
       choices: apps.map((app) => ({ name: app.name, value: app.id })),
     },
   ];
-  const { selectedApp } = await inquirer.prompt(selectApp);
-  const selectedAppDetails = await fetchCordManagementApi<ApplicationData>(
-    `applications/${selectedApp}`,
+  const { selectedProject } = await inquirer.prompt(selectProject);
+  const selectedProjectDetails = await fetchCordManagementApi<ApplicationData>(
+    `projects/${selectedProject}`,
   );
   await updateEnvVariables({
-    CORD_APP_ID: selectedAppDetails.id,
-    CORD_APP_SECRET: selectedAppDetails.secret,
+    CORD_PROJECT_ID: selectedProjectDetails.id,
+    CORD_PROJECT_SECRET: selectedProjectDetails.secret,
   });
-  prettyPrint(`You are now querying within ${selectedAppDetails.name}`);
+  prettyPrint(`You are now querying within ${selectedProjectDetails.name}`);
 }
 
 const createOrUpdateBaseOptions = {
   iconUrl: {
-    description: 'Url for application icon. Defaults to Cord logo',
+    description: 'Url for project icon. Defaults to Cord logo',
     nargs: 1,
     string: true,
   },
@@ -160,7 +160,7 @@ const createOrUpdateBaseOptions = {
 const createApplicationOptions = {
   ...createOrUpdateBaseOptions,
   name: {
-    description: 'Name of the application',
+    description: 'Name of the project',
     nargs: 1,
     string: true,
     demandOption: true,
@@ -183,34 +183,34 @@ type UpdateApplicationOptionsT = InferredOptionTypes<
   typeof updateApplicationOptions
 >;
 
-export const applicationCommand = {
-  command: ['application', 'app'],
+export const projectCommand = {
+  command: ['project', 'application', 'app'],
   describe:
-    'Manipulate applications. For more info refer to docs: https://docs.cord.com/rest-apis/applications',
+    'Manipulate projects. For more info refer to docs: https://docs.cord.com/rest-apis/applications',
   builder: (yargs: Argv) => {
     return yargs
       .demand(1)
       .command(
         'ls',
-        'List all applications: GET https://api.cord.com/v1/applications',
+        'List all projects: GET https://api.cord.com/v1/projects',
         (yargs) => yargs,
         listAllApplicationsHandler,
       )
       .command(
         'get <id>',
-        'Get an application: GET https://api.cord.com/v1/applications/<ID>',
+        'Get a project: GET https://api.cord.com/v1/projects/<ID>',
         (yargs: Argv) => yargs.positional('id', idPositional.id),
         getApplicationHandler,
       )
       .command(
         'create',
-        'Create an application: POST https://api.cord.com/v1/applications',
+        'Create a project: POST https://api.cord.com/v1/projects',
         (yargs: Argv) => yargs.options(createApplicationOptions),
         createApplicationHandler,
       )
       .command(
         'update <id>',
-        'Update an application: PUT https://api.cord.com/v1/applications/<ID>',
+        'Update a project: PUT https://api.cord.com/v1/projects/<ID>',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
@@ -219,26 +219,26 @@ export const applicationCommand = {
       )
       .command(
         'delete [--force] <id>',
-        'Delete an application: DELETE https://api.cord.com/v1/applications/<ID>',
+        'Delete a project: DELETE https://api.cord.com/v1/projects/<ID>',
         (yargs: Argv) =>
           yargs
             .positional('id', idPositional.id)
             .boolean(['--force', '-f'])
             .help(
               'force, -f',
-              'delete without app secret. CAUTION! THIS WILL DELETE THE ENTIRE APPLICATION, INCLUDING ALL USERS, THREADS, AND MESSAGES!',
+              'delete without project secret. CAUTION! THIS WILL DELETE THE ENTIRE PROJECT, INCLUDING ALL USERS, THREADS, AND MESSAGES!',
             ),
         deleteApplicationHandler,
       )
       .command(
         'select',
-        'Select an app you would like to use',
+        'Select a project you would like to use',
         (yargs) => yargs,
         selectApplicationHandler,
       )
       .command(
         'which',
-        'See the app you are using',
+        'See the project you are using',
         (yargs) => yargs,
         whichApplicationHandler,
       );

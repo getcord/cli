@@ -4,8 +4,8 @@ import path from 'path';
 
 const KEYS = [
   'VERSION_LAST_CHECKED',
-  'CORD_APP_ID',
-  'CORD_APP_SECRET',
+  'CORD_PROJECT_ID',
+  'CORD_PROJECT_SECRET',
   'CORD_CUSTOMER_ID',
   'CORD_CUSTOMER_SECRET',
   'CORD_API_URL',
