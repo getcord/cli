@@ -87,3 +87,17 @@ export function isLaterCliVersion(a: string, b: string) {
   }
   return false;
 }
+
+/**
+ * For values that may be specified multiple times, converts either a single
+ * invocation or multiple invocations into an array of values.
+ */
+export function makeArray<T>(value: T | T[] | undefined): T[] {
+  if (value === undefined) {
+    return [];
+  }
+  if (Array.isArray(value)) {
+    return value;
+  }
+  return [value];
+}

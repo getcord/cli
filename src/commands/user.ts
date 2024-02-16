@@ -9,7 +9,7 @@ import { fetchCordRESTApi } from 'src/fetchCordRESTApi';
 import { idPositional } from 'src/positionalArgs';
 import type { IdPositionalT } from 'src/positionalArgs';
 import { prettyPrint } from 'src/prettyPrint';
-import { buildQueryParams } from 'src/utils';
+import { buildQueryParams, makeArray } from 'src/utils';
 
 async function listAllUsersHandler(argv: ListAllUsersOptionsT) {
   const options = [
@@ -44,6 +44,8 @@ async function createOrUpdateUserHandler(argv: CreateOrUpdateUserOptionsT) {
     status: argv.status,
     profilePictureURL: argv.profilePicture,
     metadata: argv.metadata ? JSON.parse(argv.metadata) : undefined,
+    addGroups: makeArray(argv.addGroup),
+    removeGroups: makeArray(argv.removeGroup),
   };
   const result = await fetchCordRESTApi(
     `users/${argv.id}`,
@@ -189,6 +191,17 @@ const createOrUpdateUserOptions = {
   },
   profilePicture: {
     description: "URL of the user's profile picture",
+    nargs: 1,
+    string: true,
+  },
+  addGroup: {
+    description: 'Group to add the user to, can be specified multiple times',
+    nargs: 1,
+    string: true,
+  },
+  removeGroup: {
+    description:
+      'Group to remove the user from, can be specified multiple times',
     nargs: 1,
     string: true,
   },
