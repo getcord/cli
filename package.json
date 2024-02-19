@@ -36,6 +36,7 @@
     "@types/markdown-it": "^13.0.4",
     "@types/mime": "^3.0.2",
     "@types/node": "^20.5.7",
+    "@types/shell-quote": "^1.7.5",
     "@types/yargs": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "esbuild": "^0.19.2",
@@ -59,6 +60,7 @@
     "markdown-it": "^13.0.2",
     "mime": "^3.0.0",
     "node-fetch": "^3.3.2",
+    "shell-quote": "^1.8.1",
     "yargs": "^17.7.2"
   },
   "jest": {

@@ -44,4 +44,6 @@ Now that you have everything set up, you're good to go! Every REST endpoint has 
 
 You can run `--help` on any command to see what arguments it takes.
 
+If you prefer to use cURL syntax but would like to benefit from our automatic authentication, then you can use `cord curl project -- <request>` for project management commands, and `cord curl -- <request>` for all others.
+
 To see more information on how to interact with an endpoint, see our [docs](https://docs.cord.com/rest-apis) which contains detailed descriptions of every argument and return value.

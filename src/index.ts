@@ -15,6 +15,7 @@ import { checkVersion } from 'src/checkVersion';
 import packageData from 'package.json';
 import { permissionCommand } from 'src/commands/permission';
 import { clientAuthTokenCommand } from 'src/commands/clientAuthToken';
+import { curlCommand } from 'src/commands/curl';
 
 async function main(): Promise<void> {
   await checkVersion();
@@ -33,6 +34,7 @@ async function main(): Promise<void> {
     .command(fileCommand)
     .command(permissionCommand)
     .command(clientAuthTokenCommand)
+    .command(curlCommand)
     .fail((msg, err, yargs) => {
       yargs.showHelp();
       console.error(chalk.red(`\n${msg ?? inspect(err)}`));
