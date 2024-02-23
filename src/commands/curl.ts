@@ -50,7 +50,11 @@ function curlTypeHandler(type: 'general' | 'project') {
       exec(
         `curl --oauth2-bearer ${authToken} ${requestString}`,
         (err, stdout) => {
-          prettyPrint(JSON.parse(stdout));
+          try {
+            prettyPrint(JSON.parse(stdout));
+          } catch (e) {
+            prettyPrint(stdout);
+          }
           if (err) {
             rej(err);
           }
