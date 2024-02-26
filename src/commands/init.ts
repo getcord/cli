@@ -1,7 +1,6 @@
 import type { Argv } from 'yargs';
 import type { QuestionCollection } from 'inquirer';
 import inquirer from 'inquirer';
-import { prettyPrint } from 'src/prettyPrint';
 import { getEnvVariables, updateEnvVariables } from 'src/utils';
 
 async function initializeCord() {
@@ -85,10 +84,14 @@ async function initializeCord() {
   };
 
   await updateEnvVariables(variablesToAdd);
+  const envString = Object.entries(variablesToAdd)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('\n');
+
   console.log(
     'These variables have now been added to a .cord file in your home directory:',
   );
-  prettyPrint(variablesToAdd);
+  console.log(envString);
 
   if (includeCustomerID && !includeCustomerSecret) {
     console.log(
