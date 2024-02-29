@@ -8,7 +8,7 @@ async function initializeCord() {
     /*no-op. probably just doesn't exist yet*/
   });
   console.log(
-    'All of the following can be found at https://console.cord.com/applications',
+    'All of the following can be found at https://console.cord.com/projects',
   );
   const questions: QuestionCollection<{
     CORD_PROJECT_ID: string;
@@ -52,7 +52,7 @@ async function initializeCord() {
       name: 'CORD_CUSTOMER_ID',
       default: defaultAnswers?.CORD_CUSTOMER_ID,
       message:
-        'Find your customer ID and secret by clicking the "View application management credentials" button at the upper right of https://console.cord.com/applications. Your customer ID:',
+        'Find your customer ID and secret in your console settings at https://console.cord.com/settings/customer. Your customer ID:',
       type: 'input',
       when: (currentAnswers) => currentAnswers.requiresAppCommands,
     },

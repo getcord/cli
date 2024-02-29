@@ -186,7 +186,7 @@ type UpdateApplicationOptionsT = InferredOptionTypes<
 export const projectCommand = {
   command: ['project', 'application', 'app'],
   describe:
-    'Manipulate projects. For more info refer to docs: https://docs.cord.com/rest-apis/applications',
+    'Manipulate projects. For more info refer to docs: https://docs.cord.com/rest-apis/projects',
   builder: (yargs: Argv) => {
     return yargs
       .demand(1)
