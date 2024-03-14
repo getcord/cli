@@ -20,9 +20,9 @@ Run
 cord init
 ```
 
-This command will ask you for some credentials and add them to a `.cord` file within your home directory. To run any command (other than `cord project`) you will need the `CORD_PROJECT_ID` and `CORD_PROJECT_SECRET` of the project you would like to query within. These values can be found in the [console](https://console.cord.com/applications) under your chosen project's entry.
+This command will ask you for some credentials and add them to a `.cord` file within your home directory. To run any command (other than `cord project`) you will need the `CORD_PROJECT_ID` and `CORD_PROJECT_SECRET` of the project you would like to query within. These values can be found in the [console](https://console.cord.com/projects) under your chosen project's entry.
 
-The `CORD_CUSTOMER_ID` and `CORD_CUSTOMER_SECRET` are only needed if you need app management commands, which you probably don't. If you do, they can be found in the [console](https://console.cord.com/applications), under `View application management credentials`.
+The `CORD_CUSTOMER_ID` and `CORD_CUSTOMER_SECRET` are only needed if you need project management commands, which you probably don't. If you do, you'll have to be on the premium plan they can be found in [console](https://console.cord.com/settings/customer), under `Your Account API keys`.
 
 If you already have a `.cord` file and would like to re-configure your variables, running `cord init` will default to the existing values.
 
