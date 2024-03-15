@@ -44,7 +44,7 @@ async function initializeCord() {
     {
       name: 'requiresAppCommands',
       message:
-        'Will you be running any project management commands? (You will need extra credentials):',
+        'Will you be running any project management commands? (You will need extra credentials available on the Premium plan):',
       type: 'confirm',
       default: false,
     },
@@ -52,7 +52,7 @@ async function initializeCord() {
       name: 'CORD_CUSTOMER_ID',
       default: defaultAnswers?.CORD_CUSTOMER_ID,
       message:
-        'Find your customer ID and secret in your console settings at https://console.cord.com/settings/customer. Your customer ID:',
+        'Find your customer ID and secret under the `Your Account API keys` section in https://console.cord.com/settings/customer. Your customer ID:',
       type: 'input',
       when: (currentAnswers) => currentAnswers.requiresAppCommands,
     },
