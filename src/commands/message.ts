@@ -86,6 +86,7 @@ async function createMessageHandler(
     updatedTimestamp: argv.updatedTimestamp
       ? new Date(argv.updatedTimestamp)
       : undefined,
+    skipLinkPreviews: argv.skipLinkPreviews,
   };
 
   const result = await fetchCordRESTApi(
@@ -124,6 +125,7 @@ async function updateMessageHandler(argv: UpdateMessageOptionsT) {
     updatedTimestamp: argv.updatedTimestamp
       ? new Date(argv.updatedTimestamp)
       : undefined,
+    skipLinkPreviews: argv.skipLinkPreviews,
   };
   const result = await fetchCordRESTApi(
     `threads/${argv.threadID}/messages/${argv.id}`,
@@ -225,6 +227,11 @@ const createOrUpdateBaseMessageOptions = {
     description: 'Timestamp when the message was updated',
     nargs: 1,
     string: true,
+  },
+  skipLinkPreviews: {
+    description: 'Whether to skip url link unfurling',
+    nargs: 1,
+    boolean: true,
   },
   type: {
     description: 'Type of message',
